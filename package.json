@@ -1,0 +1,28 @@
+{
+  "name": "galileo-skills",
+  "version": "1.0.0",
+  "description": "Agent Skills for the Galileo AI platform — teach your AI coding assistant to use Galileo SDKs",
+  "main": "src/index.js",
+  "bin": {
+    "add-skill": "src/index.js"
+  },
+  "scripts": {
+    "lint": "node scripts/validate.js",
+    "test": "node scripts/validate.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gyanesh-m/skills.git"
+  },
+  "keywords": [
+    "galileo",
+    "ai",
+    "evaluation",
+    "observability",
+    "guardrails",
+    "agent-skills",
+    "llm"
+  ],
+  "author": "Gyanesh Malhotra",
+  "license": "MIT"
+}

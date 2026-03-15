@@ -1,0 +1,108 @@
+# Guardrail Metrics Reference
+
+Galileo provides proprietary metrics that can be used for evaluation scoring, production observability alerts, and runtime guardrails. These metrics are computed server-side by the Galileo platform.
+
+## RAG and Context Metrics
+
+| Metric | Description | Use Case |
+|---|---|---|
+| **Context Adherence** | Measures whether model responses are grounded in the provided context. Detects hallucinations in RAG pipelines. | RAG applications, context-based Q&A |
+| **Chunk Attribution** | Binary metric indicating whether each retrieved chunk contributed to the model's response (Attributed / Not Attributed). | RAG retrieval quality assessment |
+| **Chunk Utilization** | Measures how much of each retrieved chunk was actually used when generating the output. | Optimizing retrieval chunk size |
+| **Completeness** | Evaluates whether the response fully addresses all aspects of the input query. | Q&A systems, customer support |
+| **Instruction Adherence** | Measures model response alignment with system instructions and context. | Instruction-following evaluation |
+
+## Hallucination Detection
+
+| Metric | Description | Use Case |
+|---|---|---|
+| **Uncertainty** | Measures model certainty at both response and token level. Strongly correlates with hallucinations and fabricated facts. | General hallucination detection |
+| **Correctness** | Evaluates whether response facts are based on real, verifiable information. Combined with Uncertainty for comprehensive hallucination coverage. | Factual accuracy checks |
+
+## Safety and Content Metrics
+
+| Metric | Description | Use Case |
+|---|---|---|
+| **Toxicity** | Detects abusive, toxic, or foul language in model inputs and outputs. | Content moderation, safety filtering |
+| **PII Detection** | Surfaces instances of personally identifiable information: credit card numbers, SSNs, phone numbers, street addresses, email addresses. | Privacy compliance, data protection |
+| **Prompt Injection** | Identifies adversarial prompt injection attempts in user inputs. | Security, attack prevention |
+| **Sexism** | Detects sexist or gender-biased content. | Bias detection, content safety |
+| **Tone** | Classifies responses into 9 emotion categories. | Customer experience, brand voice |
+| **NSFW** | Detects not-safe-for-work content. | Content moderation |
+
+## Using Metrics in Code
+
+### In Evaluation Runs
+
+```python
+import promptquality as pq
+
+metrics = [
+    pq.Scorers.context_adherence_plus,
+    pq.Scorers.prompt_injection,
+    pq.Scorers.toxicity,
+    pq.Scorers.pii,
+]
+
+evaluate_run = EvaluateRun(
+    run_name="safety-eval",
+    project_name="my-project",
+    scorers=metrics,
+)
+```
+
+### In Guardrail Rules
+
+```python
+from galileo import GalileoMetrics
+from galileo_core.schemas.protect.rule import Rule, RuleOperator
+
+toxicity_rule = Rule(
+    metric=GalileoMetrics.input_toxicity,
+    operator=RuleOperator.gt,
+    target_value=0.5,
+)
+
+pii_rule = Rule(
+    metric=GalileoMetrics.pii,
+    operator=RuleOperator.gt,
+    target_value=0.0,
+)
+
+injection_rule = Rule(
+    metric=GalileoMetrics.prompt_injection,
+    operator=RuleOperator.gt,
+    target_value=0.7,
+)
+```
+
+### Available `GalileoMetrics` Constants
+
+- `GalileoMetrics.input_toxicity`
+- `GalileoMetrics.output_toxicity`
+- `GalileoMetrics.pii`
+- `GalileoMetrics.prompt_injection`
+- `GalileoMetrics.sexism`
+- `GalileoMetrics.tone`
+- `GalileoMetrics.context_adherence`
+- `GalileoMetrics.chunk_attribution`
+- `GalileoMetrics.chunk_utilization`
+- `GalileoMetrics.completeness`
+- `GalileoMetrics.uncertainty`
+- `GalileoMetrics.correctness`
+- `GalileoMetrics.instruction_adherence`
+
+### Available `pq.Scorers` Constants
+
+- `pq.Scorers.context_adherence_plus`
+- `pq.Scorers.prompt_injection`
+- `pq.Scorers.toxicity`
+- `pq.Scorers.pii`
+- `pq.Scorers.sexism`
+- `pq.Scorers.tone`
+- `pq.Scorers.chunk_attribution`
+- `pq.Scorers.chunk_utilization`
+- `pq.Scorers.completeness`
+- `pq.Scorers.uncertainty`
+- `pq.Scorers.correctness`
+- `pq.Scorers.instruction_adherence`
