@@ -6,7 +6,7 @@ compatibility: Requires Python 3.9+. Works with pip, poetry, or uv.
 metadata:
   author: gyanesh-m
   version: "1.0.0"
-  sdk-version: "latest"
+  sdk-version: "2.1.1"
   sdk-repo: https://github.com/rungalileo/galileo-python
   docs: https://docs.galileo.ai
 ---
