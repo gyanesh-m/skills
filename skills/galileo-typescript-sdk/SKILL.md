@@ -37,23 +37,20 @@ pnpm add galileo
 ## Quick Start
 
 ```typescript
-import { GalileoObserveWorkflow } from "galileo";
+import { wrapOpenAI, init, flush } from "galileo";
+import OpenAI from "openai";
 
-const workflow = new GalileoObserveWorkflow("my-observe-project");
-await workflow.init();
+await init({ projectName: "my-project", logstream: "my-log-stream" });
 
-workflow.addWorkflow({ input: "What is quantum computing?" });
-
-workflow.addLlmStep({
-  input: "What is quantum computing?",
-  output: "Quantum computing uses quantum bits...",
-  durationNs: 1500000000,
+const openai = wrapOpenAI(new OpenAI());
+const response = await openai.chat.completions.create({
   model: "gpt-4o",
+  messages: [{ role: "user", content: "Explain quantum computing in one sentence." }],
 });
 
-workflow.concludeWorkflow("Quantum computing uses quantum bits...");
+console.log(response.choices[0].message.content);
 
-await workflow.uploadWorkflows();
+await flush();
 ```
 
 ## Authentication
@@ -72,206 +69,281 @@ GALILEO_USERNAME="your-username"
 GALILEO_PASSWORD="your-password"
 ```
 
-## Observability with GalileoObserveWorkflow
+## Observability
 
-### Basic Workflow Logging
+### Wrapped OpenAI Client (Auto-Logging)
+
+The simplest way to trace all OpenAI calls — wrap the client and all calls are logged automatically:
 
 ```typescript
-import { GalileoObserveWorkflow } from "galileo";
+import { wrapOpenAI, init, flush } from "galileo";
+import OpenAI from "openai";
 
-const workflow = new GalileoObserveWorkflow("my-project");
-await workflow.init();
+await init({ projectName: "my-project", logstream: "production" });
 
-workflow.addWorkflow({ input: "User question here" });
-
-workflow.addLlmStep({
-  input: "User question here",
-  output: "LLM response text",
-  durationNs: 1200000000,
+const openai = wrapOpenAI(new OpenAI());
+const response = await openai.chat.completions.create({
   model: "gpt-4o",
+  messages: [{ role: "user", content: "What is RAG?" }],
 });
 
-workflow.concludeWorkflow("LLM response text");
-
-await workflow.uploadWorkflows();
+await flush();
 ```
 
-### Logging Retriever Steps
+Azure OpenAI is also supported via `wrapAzureOpenAI`.
+
+### The `log()` Function Wrapper
+
+Wrap any function to log its execution as a span. Supports sync, async, and generator functions:
 
 ```typescript
-workflow.addWorkflow({ input: "What are the benefits of RAG?" });
+import { log, init, flush } from "galileo";
 
-workflow.addRetrieverStep({
-  input: "What are the benefits of RAG?",
-  output: ["Document 1 content", "Document 2 content"],
-});
+await init({ projectName: "my-project", logstream: "production" });
 
-workflow.addLlmStep({
-  input: "Based on the context, explain RAG benefits.",
-  output: "RAG provides improved accuracy by...",
-  durationNs: 2000000000,
-  model: "gpt-4o",
-});
+const retrieveDocuments = log(
+  { spanType: "retriever", name: "vector-search" },
+  async (query: string) => {
+    const results = await vectorDb.search(query, { k: 5 });
+    return results.map((r) => r.content);
+  }
+);
 
-workflow.concludeWorkflow("RAG provides improved accuracy by...");
+const generateResponse = log(
+  { spanType: "llm", name: "gpt-4o-call" },
+  async (query: string, context: string[]) => {
+    const openai = new OpenAI();
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "user", content: `Context: ${context.join("\n")}\n\nQuestion: ${query}` }],
+    });
+    return response.choices[0].message.content;
+  }
+);
+
+const ragPipeline = log(
+  { spanType: "workflow", name: "rag-pipeline" },
+  async (query: string) => {
+    const docs = await retrieveDocuments(query);
+    return generateResponse(query, docs);
+  }
+);
+
+await ragPipeline("What are the benefits of RAG?");
+await flush();
 ```
 
-### Logging Tool Steps
+Supported span types: `workflow`, `llm`, `retriever`, `tool`, `agent`.
+
+### GalileoLogger (Manual Spans)
+
+For fine-grained control, use `GalileoLogger` directly to build traces with explicit spans:
 
 ```typescript
-workflow.addWorkflow({ input: "Calculate 15 * 42" });
+import { GalileoLogger } from "galileo";
 
-workflow.addToolStep({
+const logger = new GalileoLogger({
+  projectName: "my-project",
+  logStreamName: "production",
+});
+
+logger.startTrace({ input: "Calculate 15 * 42" });
+
+logger.addToolSpan({
   input: "15 * 42",
   output: "630",
   durationNs: 50000000,
 });
 
-workflow.addLlmStep({
+logger.addLlmSpan({
   input: "The calculator returned 630. Respond to the user.",
   output: "15 multiplied by 42 equals 630.",
   durationNs: 800000000,
   model: "gpt-4o",
 });
 
-workflow.concludeWorkflow("15 multiplied by 42 equals 630.");
+logger.conclude({ output: "15 multiplied by 42 equals 630." });
+
+await logger.flush();
 ```
 
-## Evaluation with GalileoEvaluateWorkflow
+Available span methods: `addLlmSpan`, `addRetrieverSpan`, `addToolSpan`, `addWorkflowSpan`, `addAgentSpan`, `addProtectSpan`.
 
-### Running an Evaluation
+### Context API
+
+Use `galileoContext` for scoped lifecycle management:
 
 ```typescript
-import { GalileoEvaluateWorkflow } from "galileo";
+import { galileoContext } from "galileo";
 
-const evaluateWorkflow = new GalileoEvaluateWorkflow("eval-project");
-await evaluateWorkflow.init();
+await galileoContext.init({ projectName: "my-project", logstream: "production" });
 
-const testCases = [
-  { input: "What is ML?", expected: "Machine learning is..." },
-  { input: "Explain AI", expected: "Artificial intelligence is..." },
-];
+// ... trace your calls ...
 
-for (const testCase of testCases) {
-  evaluateWorkflow.addWorkflow({ input: testCase.input });
+await galileoContext.flush();
+await galileoContext.reset();
+```
 
-  const response = await callYourLLM(testCase.input);
+### Sessions
 
-  evaluateWorkflow.addLlmStep({
-    input: testCase.input,
-    output: response,
-    durationNs: 1000000000,
-    model: "gpt-4o",
-  });
+Group related traces into sessions for multi-turn conversations:
 
-  evaluateWorkflow.concludeWorkflow(response);
-}
+```typescript
+import { init, flush, startSession, setSession, clearSession } from "galileo";
 
-await evaluateWorkflow.uploadWorkflows({
-  context_adherence: true,
-  completeness: true,
-  toxicity: true,
+await init({ projectName: "my-project", logstream: "production" });
+
+const sessionId = await startSession({ name: "user-conversation-123" });
+
+// All traces created between setSession and clearSession are grouped
+setSession(sessionId);
+// ... log your traces ...
+clearSession();
+
+await flush();
+```
+
+## Evaluation
+
+### Running an Experiment
+
+Use `runExperiment` to evaluate your LLM pipeline against a dataset with automated scoring:
+
+```typescript
+import { runExperiment } from "galileo";
+
+const result = await runExperiment({
+  name: "qa-eval-run",
+  datasetName: "my-test-dataset",
+  metrics: ["context_adherence", "completeness", "toxicity"],
+  projectName: "eval-project",
+  function: async (input) => {
+    const response = await callYourLLM(input.question);
+    return response;
+  },
+});
+
+console.log("Experiment link:", result.link);
+```
+
+### Experiment with Inline Dataset
+
+```typescript
+import { runExperiment } from "galileo";
+
+const result = await runExperiment({
+  name: "rag-eval",
+  dataset: [
+    { question: "What is ML?", expected: "Machine learning is..." },
+    { question: "Explain AI", expected: "Artificial intelligence is..." },
+  ],
+  metrics: ["context_adherence", "chunk_attribution_utilization", "completeness"],
+  projectName: "eval-project",
+  function: async (input) => {
+    const docs = await retrieve(input.question);
+    return generateAnswer(input.question, docs);
+  },
 });
 ```
 
-### Evaluation with RAG Steps
+### Experiment with Prompt Template
 
 ```typescript
-const evaluateWorkflow = new GalileoEvaluateWorkflow("rag-eval");
-await evaluateWorkflow.init();
+import { runExperiment } from "galileo";
 
-evaluateWorkflow.addWorkflow({ input: "How does photosynthesis work?" });
+const result = await runExperiment({
+  name: "prompt-eval",
+  datasetName: "my-test-dataset",
+  promptTemplate: { id: "your-prompt-template-id" },
+  promptSettings: { model_alias: "GPT-4o", temperature: 0.7 },
+  metrics: ["correctness", "instruction_adherence"],
+  projectName: "eval-project",
+});
+```
 
-evaluateWorkflow.addRetrieverStep({
+See [Advanced Evaluation Patterns](references/EVALUATION.md) for more.
+
+## Common Patterns
+
+### RAG Pipeline with Retriever Spans
+
+```typescript
+import { GalileoLogger } from "galileo";
+
+const logger = new GalileoLogger({
+  projectName: "rag-app",
+  logStreamName: "production",
+});
+
+logger.startTrace({ input: "How does photosynthesis work?" });
+
+logger.addRetrieverSpan({
   input: "How does photosynthesis work?",
   output: ["Photosynthesis is the process by which plants..."],
 });
 
-evaluateWorkflow.addLlmStep({
+logger.addLlmSpan({
   input: "Using the context, explain photosynthesis.",
   output: "Photosynthesis is a process used by plants...",
   durationNs: 1500000000,
   model: "gpt-4o",
 });
 
-evaluateWorkflow.concludeWorkflow("Photosynthesis is a process used by plants...");
-
-await evaluateWorkflow.uploadWorkflows({
-  context_adherence: true,
-  chunk_attribution: true,
-});
-```
-
-## Common Patterns
-
-### Multiple Workflows in a Single Upload
-
-```typescript
-const workflow = new GalileoObserveWorkflow("batch-project");
-await workflow.init();
-
-const queries = ["Question 1", "Question 2", "Question 3"];
-
-for (const query of queries) {
-  workflow.addWorkflow({ input: query });
-
-  const response = await callYourLLM(query);
-
-  workflow.addLlmStep({
-    input: query,
-    output: response,
-    durationNs: 1000000000,
-    model: "gpt-4o",
-  });
-
-  workflow.concludeWorkflow(response);
-}
-
-await workflow.uploadWorkflows();
+logger.conclude({ output: "Photosynthesis is a process used by plants..." });
+await logger.flush();
 ```
 
 ### Nested Agent Workflows
 
 ```typescript
-const workflow = new GalileoObserveWorkflow("agent-project");
-await workflow.init();
+import { GalileoLogger } from "galileo";
 
-workflow.addWorkflow({ input: "Research and summarize quantum computing" });
+const logger = new GalileoLogger({
+  projectName: "agent-app",
+  logStreamName: "production",
+});
 
-workflow.addToolStep({
+logger.startTrace({ input: "Research and summarize quantum computing" });
+
+logger.addToolSpan({
   input: "search: quantum computing overview",
   output: "Search results...",
   durationNs: 200000000,
 });
 
-workflow.addRetrieverStep({
+logger.addRetrieverSpan({
   input: "quantum computing",
   output: ["Doc1: Quantum bits...", "Doc2: Superposition..."],
 });
 
-workflow.addLlmStep({
+logger.addLlmSpan({
   input: "Summarize the following research on quantum computing...",
   output: "Quantum computing leverages quantum mechanical phenomena...",
   durationNs: 2500000000,
   model: "gpt-4o",
 });
 
-workflow.concludeWorkflow(
-  "Quantum computing leverages quantum mechanical phenomena..."
-);
+logger.conclude({
+  output: "Quantum computing leverages quantum mechanical phenomena...",
+});
 
-await workflow.uploadWorkflows();
+await logger.flush();
 ```
 
 ## Best Practices
 
-1. **Always call `init()`** before adding workflows — it authenticates and sets up the project.
-2. **Always call `concludeWorkflow()`** with the final output before starting the next workflow or uploading.
-3. **Always call `uploadWorkflows()`** at the end to send data to Galileo.
-4. **Use accurate `durationNs` values** — measure actual LLM call duration in nanoseconds for meaningful latency tracking.
-5. **Set environment variables** in `.env` files rather than hardcoding API keys.
-6. **Use `GalileoEvaluateWorkflow`** for test/eval runs and **`GalileoObserveWorkflow`** for production monitoring.
-7. **Pass scorer configuration** to `uploadWorkflows()` in evaluate mode to get metric scores computed.
+1. **Call `init()` or create a `GalileoLogger`** before logging any traces.
+2. **Always call `flush()`** at the end to upload traces to Galileo. In web servers, flush at the end of each request handler.
+3. **Use `wrapOpenAI`** for zero-config automatic tracing of all OpenAI calls.
+4. **Use `log()`** to wrap functions as spans — it handles sync, async, and generator functions automatically.
+5. **Use `GalileoLogger`** when you need fine-grained control over individual spans.
+6. **Use `runExperiment`** for evaluation runs — it handles dataset loading, scoring, and result upload.
+7. **Set environment variables** in `.env` files rather than hardcoding API keys.
+8. **Use accurate `durationNs` values** when manually creating spans for meaningful latency tracking.
+
+## Legacy API
+
+`GalileoObserveWorkflow` and `GalileoEvaluateWorkflow` are deprecated but still exported for backward compatibility. Use `GalileoLogger` (or `wrapOpenAI` / `log()`) and `runExperiment` instead.
 
 ## Resources
 

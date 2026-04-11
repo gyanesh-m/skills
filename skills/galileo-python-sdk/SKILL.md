@@ -2,7 +2,7 @@
 name: galileo-python-sdk
 description: Complete reference for the Galileo AI platform Python SDK for evaluating, observing, and protecting GenAI applications. Use when building Python applications that need LLM evaluation, production observability, tracing, or runtime guardrails with Galileo.
 license: MIT
-compatibility: Requires Python 3.9+. Works with pip, poetry, or uv.
+compatibility: Requires Python 3.10+ (v2.x). Python 3.9 supported up to v1.39.x. Works with pip, poetry, or uv.
 metadata:
   author: gyanesh-m
   version: "1.0.0"

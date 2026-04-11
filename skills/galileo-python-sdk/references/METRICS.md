@@ -64,7 +64,7 @@ toxicity_rule = Rule(
 )
 
 pii_rule = Rule(
-    metric=GalileoMetrics.pii,
+    metric=GalileoMetrics.input_pii,
     operator=RuleOperator.gt,
     target_value=0.0,
 )
@@ -78,19 +78,35 @@ injection_rule = Rule(
 
 ### Available `GalileoMetrics` Constants
 
-- `GalileoMetrics.input_toxicity`
-- `GalileoMetrics.output_toxicity`
-- `GalileoMetrics.pii`
-- `GalileoMetrics.prompt_injection`
-- `GalileoMetrics.sexism`
-- `GalileoMetrics.tone`
+**RAG & Context:**
 - `GalileoMetrics.context_adherence`
-- `GalileoMetrics.chunk_attribution`
-- `GalileoMetrics.chunk_utilization`
+- `GalileoMetrics.chunk_attribution_utilization`
 - `GalileoMetrics.completeness`
-- `GalileoMetrics.uncertainty`
-- `GalileoMetrics.correctness`
+- `GalileoMetrics.context_relevance`
+- `GalileoMetrics.ground_truth_adherence`
 - `GalileoMetrics.instruction_adherence`
+
+**Safety & Content:**
+- `GalileoMetrics.input_toxicity` / `GalileoMetrics.output_toxicity`
+- `GalileoMetrics.input_pii` / `GalileoMetrics.output_pii`
+- `GalileoMetrics.prompt_injection`
+- `GalileoMetrics.input_sexist` / `GalileoMetrics.output_sexist`
+- `GalileoMetrics.input_tone` / `GalileoMetrics.output_tone`
+- `GalileoMetrics.sql_injection`
+
+**Quality & Accuracy:**
+- `GalileoMetrics.correctness`
+- `GalileoMetrics.uncertainty`
+
+**Agentic:**
+- `GalileoMetrics.agent_efficiency`
+- `GalileoMetrics.agent_flow`
+- `GalileoMetrics.tool_selection_quality`
+- `GalileoMetrics.tool_error_rate`
+- `GalileoMetrics.agentic_workflow_success`
+- `GalileoMetrics.agentic_session_success`
+
+Many metrics also have `_luna` variants (e.g., `context_adherence_luna`) that use Galileo's small language model for faster, lower-cost scoring.
 
 ### Available `pq.Scorers` Constants
 
