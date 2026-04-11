@@ -34,10 +34,29 @@
         --gray-1000: #ededed;
         --blue: #52a8ff;
         --green: #45d483;
+        --header-bg: rgba(0, 0, 0, 0.8);
         --radius: 0.5rem;
         --mono: 'Geist Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
         --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      :root.light {
+        --bg: #fff;
+        --fg: #111;
+        --gray-100: #f5f5f5;
+        --gray-200: #e5e5e5;
+        --gray-300: #d4d4d4;
+        --gray-400: #a3a3a3;
+        --gray-500: #737373;
+        --gray-600: #525252;
+        --gray-700: #404040;
+        --gray-800: #262626;
+        --gray-900: #171717;
+        --gray-1000: #111;
+        --blue: #2563eb;
+        --green: #16a34a;
+        --header-bg: rgba(255, 255, 255, 0.85);
       }
 
       html { scroll-behavior: smooth; }
@@ -72,7 +91,7 @@
         height: 56px;
         display: flex;
         align-items: center;
-        background: rgba(0, 0, 0, 0.8);
+        background: var(--header-bg);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border-bottom: 1px solid var(--gray-200);
@@ -136,6 +155,36 @@
         align-items: center;
         gap: 6px;
       }
+
+      .theme-toggle {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+        background: var(--gray-100);
+        color: var(--gray-600);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 150ms, border-color 150ms, color 150ms, transform 160ms var(--ease-out);
+        flex-shrink: 0;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .theme-toggle:hover {
+          background: var(--gray-200);
+          color: var(--fg);
+        }
+      }
+
+      .theme-toggle:active { transform: scale(0.93); }
+
+      .theme-toggle .icon-sun,
+      .theme-toggle .icon-moon { display: none; }
+
+      :root.light .theme-toggle .icon-sun { display: block; }
+      :root:not(.light) .theme-toggle .icon-moon { display: block; }
 
       .header-badge-new {
         font-size: 10px;
@@ -830,6 +879,10 @@
             <span class="header-badge-new">2</span>
           </a>
           <a href="https://github.com/gyanesh-m/skills" target="_blank" rel="noopener">GitHub</a>
+          <button class="theme-toggle" onclick="document.documentElement.classList.toggle('light');localStorage.setItem('theme',document.documentElement.classList.contains('light')?'light':'dark')" aria-label="Toggle theme">
+            <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
         </nav>
       </div>
     </header>
@@ -1110,5 +1163,10 @@
       </footer>
     </div>
 
+    <script>
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.classList.add('light');
+      }
+    </script>
   </body>
 </html>
