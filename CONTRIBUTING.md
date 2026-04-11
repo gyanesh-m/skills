@@ -1,4 +1,4 @@
-# Contributing to the Eval Agent Skills Catalog
+# Contributing to the Agent Skills Catalog
 
 Thank you for your interest in contributing! This guide explains how to add new skills or improve existing ones in this curated multi-vendor eval catalog.
 
