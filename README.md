@@ -11,6 +11,12 @@ Curated, multi-vendor evaluation and observability skills for AI coding agents.
 
 **Compatible with:** Claude Code, Codex, Cursor, OpenCode, and more via `skills` CLI.
 
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-compatible-6B46FF)](https://code.claude.com/docs/en/skills)
+[![Codex](https://img.shields.io/badge/Codex-compatible-10A37F)](https://developers.openai.com/codex/skills)
+[![Cursor](https://img.shields.io/badge/Cursor-compatible-111827)](https://cursor.com/docs/context/skills)
+[![OpenCode](https://img.shields.io/badge/OpenCode-compatible-2563EB)](https://opencode.ai/docs/skills)
+[![Skills CLI](https://img.shields.io/badge/skills%20CLI-open%20ecosystem-0EA5E9)](https://github.com/vercel-labs/skills)
+
 This repository is designed to be installed with the open `skills` CLI and discovered through the `skills.sh` ecosystem.
 
 ## Why developers use this catalog
