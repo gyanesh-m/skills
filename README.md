@@ -7,6 +7,13 @@ Curated, multi-vendor evaluation and observability skills for AI coding agents.
 
 This repository is designed to be installed with the open `skills` CLI and discovered through the `skills.sh` ecosystem.
 
+## Why developers use this catalog
+
+- Centralized eval-focused skills with practical SDK guidance
+- Compatible with the open Agent Skills format (`SKILL.md`)
+- Installable with standard `skills` CLI commands
+- Structured for curated growth across vendors and tracks
+
 ## Quick Start
 
 Install this catalog:
@@ -47,24 +54,15 @@ This repository currently keeps stable skills in `skills/` and supports curated 
 
 ## Available Skills
 
-### `galileo-python-sdk`
+| Skill | Vendor | Track | Focus | Install |
+|---|---|---|---|---|
+| `galileo-python-sdk` | Galileo | stable | Evaluate, observe, protect (Python) | `npx skills add gyanesh-m/skills --skill galileo-python-sdk` |
+| `galileo-typescript-sdk` | Galileo | stable | Evaluate + observe (TypeScript/JS) | `npx skills add gyanesh-m/skills --skill galileo-typescript-sdk` |
 
-Galileo Python SDK guide for evaluate, observe, and protect workflows:
+### Highlights
 
-- Observability and tracing with `galileo_context` and `@log`
-- Wrapped OpenAI client instrumentation
-- Evaluation experiments with `promptquality`
-- Runtime guardrails with Galileo Protect
-- Integrations across common Python agent frameworks
-
-### `galileo-typescript-sdk`
-
-Galileo TypeScript/JS SDK guide for evaluation and production monitoring:
-
-- `GalileoEvaluateWorkflow` and scoring configuration
-- `GalileoObserveWorkflow` for production traces
-- LLM, retriever, and tool step logging patterns
-- Integration guidance for JS/TS agent stacks
+- **`galileo-python-sdk`**: end-to-end guidance for tracing, evaluation runs, guardrails, and Python framework integrations.
+- **`galileo-typescript-sdk`**: workflow-based guidance for JS/TS observability and evaluation scoring patterns.
 
 ## Submission Model
 
@@ -75,6 +73,19 @@ This project is evolving into a curated multi-vendor index for eval skills:
 - `skills/.system/` for maintainer-only internal skills (optional)
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for submission rules and naming conventions.
+
+## Developer Workflow
+
+```bash
+# Validate skill metadata/frontmatter
+npm run lint
+
+# Discover this catalog exactly as users do
+npx skills add gyanesh-m/skills --list
+
+# Install one skill into your current project
+npx skills add gyanesh-m/skills --skill galileo-python-sdk
+```
 
 ## Resources
 

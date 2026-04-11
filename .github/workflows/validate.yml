@@ -51,5 +51,5 @@ jobs:
           test -f "./.claude/skills/galileo-python-sdk/SKILL.md"
           test -f "./.claude/skills/galileo-typescript-sdk/SKILL.md"
 
-          rg -n "^name: galileo-python-sdk" "./.agents/skills/galileo-python-sdk/SKILL.md" "./.claude/skills/galileo-python-sdk/SKILL.md"
-          rg -n "^name: galileo-typescript-sdk" "./.agents/skills/galileo-typescript-sdk/SKILL.md" "./.claude/skills/galileo-typescript-sdk/SKILL.md"
+          grep -En "^name: galileo-python-sdk" "./.agents/skills/galileo-python-sdk/SKILL.md" "./.claude/skills/galileo-python-sdk/SKILL.md"
+          grep -En "^name: galileo-typescript-sdk" "./.agents/skills/galileo-typescript-sdk/SKILL.md" "./.claude/skills/galileo-typescript-sdk/SKILL.md"
