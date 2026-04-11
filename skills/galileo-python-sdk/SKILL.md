@@ -15,11 +15,32 @@ metadata:
 
 The Galileo Python SDK (`galileo`) provides a unified interface for the Galileo AI platform — enabling evaluation, observability, and runtime guardrails for GenAI applications. It supports automatic tracing of LLM calls, custom span logging, evaluation experiments, and production-grade guardrails.
 
+## SDK Version Detection
+
+**Check installed versions before writing any code** to pick the right reference:
+
+```python
+import importlib.metadata, importlib.util
+
+galileo_ver = importlib.metadata.version("galileo")        # e.g. "2.1.1"
+pq_installed = importlib.util.find_spec("promptquality") is not None
+pq_ver = importlib.metadata.version("promptquality") if pq_installed else None
+print(f"galileo={galileo_ver}, promptquality={pq_ver}")
+```
+
+| Installed stack | Use |
+|---|---|
+| `galileo >= 2.0` (with or without `promptquality 0.x`) | This skill — `GalileoLogger`, `@log`, `galileo_context` |
+| `galileo < 2.0` + `promptquality >= 1.0` | [Promptquality 1.x Reference](references/PROMPTQUALITY.md) |
+
+> **Note:** `promptquality >= 1.0` and `galileo >= 2.0` are **mutually incompatible** — they require different major versions of `galileo-core`. Installing both will cause dependency conflicts.
+
 **Additional references:**
 
 - [Framework Integrations](references/INTEGRATIONS.md) — OpenAI, Anthropic, LangChain, LangGraph, CrewAI, PydanticAI, and more
 - [Guardrail Metrics Reference](references/METRICS.md) — Hallucination Index, Context Adherence, Toxicity, PII, and all available metrics
 - [Advanced Evaluation Patterns](references/EVALUATION.md) — Experiments, eval sets, prompt optimization, and scoring
+- [Promptquality 1.x Reference](references/PROMPTQUALITY.md) — EvaluateRun, Scorers, ScorersConfiguration for the galileo 1.x stack
 
 ## Installation
 
@@ -199,33 +220,28 @@ pq.run(
 )
 ```
 
-### Evaluation Runs with Scorers
+### Evaluation Runs with Custom Workflows (galileo 2.x)
+
+Use `GalileoLogger` to log traces for evaluation:
 
 ```python
-from promptquality import EvaluateRun
-import promptquality as pq
+from galileo import GalileoLogger
 
-pq.login()
-
-metrics = [pq.Scorers.context_adherence_plus, pq.Scorers.prompt_injection]
-
-evaluate_run = EvaluateRun(
-    run_name="my_run",
-    project_name="my_project",
-    scorers=metrics,
-)
+logger = GalileoLogger(project="my_project", log_stream="my_run")
 
 eval_set = ["What are hallucinations?", "What are intrinsic hallucinations?"]
 for input_text in eval_set:
     output = llm.call(input_text)
-    evaluate_run.add_single_step_workflow(
+    logger.add_single_llm_span_trace(
         input=input_text,
         output=output,
         model="gpt-4o",
     )
 
-evaluate_run.finish()
+logger.flush()
 ```
+
+> For the `galileo < 2.0` + `promptquality >= 1.0` stack, use `EvaluateRun` — see [Promptquality 1.x Reference](references/PROMPTQUALITY.md).
 
 See [Advanced Evaluation Patterns](references/EVALUATION.md) for more.
 

@@ -9,6 +9,11 @@
       "name": "galileo-typescript-sdk",
       "path": "skills/galileo-typescript-sdk",
       "description": "Galileo AI platform TypeScript/JS SDK for evaluation, observability, and guardrails"
+    },
+    {
+      "name": "braintrust-sdk",
+      "path": "skills/braintrust-sdk",
+      "description": "Braintrust Python and TypeScript SDKs for LLM evaluation experiments, production tracing, and autoevals scoring"
     }
   ]
 }

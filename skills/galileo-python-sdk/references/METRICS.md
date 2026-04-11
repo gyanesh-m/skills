@@ -90,21 +90,18 @@ injection_rule = Rule(
 - `GalileoMetrics.input_toxicity` / `GalileoMetrics.output_toxicity`
 - `GalileoMetrics.input_pii` / `GalileoMetrics.output_pii`
 - `GalileoMetrics.prompt_injection`
-- `GalileoMetrics.input_sexist` / `GalileoMetrics.output_sexist`
+- `GalileoMetrics.input_sexism` / `GalileoMetrics.output_sexism`
 - `GalileoMetrics.input_tone` / `GalileoMetrics.output_tone`
 - `GalileoMetrics.sql_injection`
 
 **Quality & Accuracy:**
 - `GalileoMetrics.correctness`
-- `GalileoMetrics.uncertainty`
 
 **Agentic:**
 - `GalileoMetrics.agent_efficiency`
 - `GalileoMetrics.agent_flow`
 - `GalileoMetrics.tool_selection_quality`
 - `GalileoMetrics.tool_error_rate`
-- `GalileoMetrics.agentic_workflow_success`
-- `GalileoMetrics.agentic_session_success`
 
 Many metrics also have `_luna` variants (e.g., `context_adherence_luna`) that use Galileo's small language model for faster, lower-cost scoring.
 
@@ -114,11 +111,8 @@ Many metrics also have `_luna` variants (e.g., `context_adherence_luna`) that us
 - `pq.Scorers.prompt_injection`
 - `pq.Scorers.toxicity`
 - `pq.Scorers.pii`
-- `pq.Scorers.sexism`
+- `pq.Scorers.sexist`
 - `pq.Scorers.tone`
-- `pq.Scorers.chunk_attribution`
-- `pq.Scorers.chunk_utilization`
-- `pq.Scorers.completeness`
-- `pq.Scorers.uncertainty`
+- `pq.Scorers.chunk_attribution_utilization_plus`
+- `pq.Scorers.completeness_plus`
 - `pq.Scorers.correctness`
-- `pq.Scorers.instruction_adherence`
