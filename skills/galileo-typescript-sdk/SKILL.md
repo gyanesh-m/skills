@@ -6,14 +6,14 @@ compatibility: Requires Node.js 18+. Works with npm, yarn, or pnpm.
 metadata:
   author: gyanesh-m
   version: "1.0.0"
-  sdk-version: "1.3.0"
+  sdk-version: "2.0.0"
   sdk-repo: https://github.com/rungalileo/galileo-js
   docs: https://docs.galileo.ai
 ---
 
 # Galileo TypeScript SDK
 
-The Galileo TypeScript SDK (`@rungalileo/galileo`) provides evaluation and observability workflows for GenAI applications in Node.js and TypeScript. It supports logging LLM calls, retriever operations, tool invocations, and multi-step workflows with built-in scoring.
+The Galileo TypeScript SDK (`galileo`) provides evaluation and observability workflows for GenAI applications in Node.js and TypeScript. It supports logging LLM calls, retriever operations, tool invocations, and multi-step workflows with built-in scoring.
 
 **Additional references:**
 
@@ -24,20 +24,20 @@ The Galileo TypeScript SDK (`@rungalileo/galileo`) provides evaluation and obser
 ## Installation
 
 ```bash
-npm install @rungalileo/galileo
+npm install galileo
 ```
 
 Or with yarn/pnpm:
 
 ```bash
-yarn add @rungalileo/galileo
-pnpm add @rungalileo/galileo
+yarn add galileo
+pnpm add galileo
 ```
 
 ## Quick Start
 
 ```typescript
-import { GalileoObserveWorkflow } from "@rungalileo/galileo";
+import { GalileoObserveWorkflow } from "galileo";
 
 const workflow = new GalileoObserveWorkflow("my-observe-project");
 await workflow.init();
@@ -77,7 +77,7 @@ GALILEO_PASSWORD="your-password"
 ### Basic Workflow Logging
 
 ```typescript
-import { GalileoObserveWorkflow } from "@rungalileo/galileo";
+import { GalileoObserveWorkflow } from "galileo";
 
 const workflow = new GalileoObserveWorkflow("my-project");
 await workflow.init();
@@ -142,7 +142,7 @@ workflow.concludeWorkflow("15 multiplied by 42 equals 630.");
 ### Running an Evaluation
 
 ```typescript
-import { GalileoEvaluateWorkflow } from "@rungalileo/galileo";
+import { GalileoEvaluateWorkflow } from "galileo";
 
 const evaluateWorkflow = new GalileoEvaluateWorkflow("eval-project");
 await evaluateWorkflow.init();
@@ -278,5 +278,5 @@ await workflow.uploadWorkflows();
 - **Documentation:** https://docs.galileo.ai
 - **TypeScript SDK repo:** https://github.com/rungalileo/galileo-js
 - **SDK examples:** https://github.com/rungalileo/sdk-examples
-- **npm:** https://www.npmjs.com/package/@rungalileo/galileo
+- **npm:** https://www.npmjs.com/package/galileo
 - **Galileo console:** https://app.galileo.ai
