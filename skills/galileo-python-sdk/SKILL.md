@@ -65,11 +65,12 @@ galileo_context.flush()
 Set the following environment variables:
 
 ```bash
-export GALILEO_API_KEY="your-api-key"           # Required — from Galileo console
-export GALILEO_CONSOLE_URL="https://app.galileo.ai"  # Console URL (or self-hosted URL)
-export GALILEO_PROJECT="my-project"              # Optional — default project
-export GALILEO_LOG_STREAM="my-log-stream"        # Optional — default log stream
-export GALILEO_LOGGING_DISABLED="false"           # Optional — disable logging
+# .env file or shell environment
+GALILEO_API_KEY="your-api-key"            # Required — from Galileo console
+GALILEO_CONSOLE_URL="https://app.galileo.ai"  # Console URL (or self-hosted URL)
+GALILEO_PROJECT="my-project"              # Optional — default project
+GALILEO_LOG_STREAM="my-log-stream"        # Optional — default log stream
+GALILEO_LOGGING_DISABLED="false"          # Optional — disable logging
 ```
 
 For the legacy `promptquality` package, authenticate programmatically:
@@ -332,8 +333,12 @@ def rag_pipeline(question: str):
 from galileo import log
 
 @log(span_type="tool")
-def calculator(expression: str):
-    return str(eval(expression))
+def calculator(a: float, b: float, op: str) -> str:
+    if op == "add":
+        return str(a + b)
+    elif op == "multiply":
+        return str(a * b)
+    raise ValueError(f"Unknown op: {op}")
 
 @log(span_type="tool")
 def web_search(query: str):
