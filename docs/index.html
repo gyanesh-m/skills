@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eval Agent Skills Catalog</title>
+    <meta
+      name="description"
+      content="Curated multi-vendor evaluation and observability skills for AI coding agents."
+    />
+    <meta property="og:title" content="Eval Agent Skills Catalog" />
+    <meta
+      property="og:description"
+      content="Install open agent skills for evaluation and observability workflows."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://github.com/gyanesh-m/skills" />
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+          sans-serif;
+        margin: 0;
+        background: #0b1020;
+        color: #e5e7eb;
+      }
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px 64px;
+      }
+      h1,
+      h2 {
+        margin: 0 0 12px;
+      }
+      p {
+        line-height: 1.6;
+        color: #cbd5e1;
+      }
+      .hero {
+        padding: 28px;
+        border: 1px solid #334155;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #0f172a, #111827);
+      }
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .btn {
+        text-decoration: none;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 10px 14px;
+        color: #e5e7eb;
+      }
+      .btn.primary {
+        background: #2563eb;
+        border-color: #2563eb;
+      }
+      pre {
+        margin-top: 16px;
+        padding: 14px;
+        border-radius: 10px;
+        background: #020617;
+        border: 1px solid #334155;
+        overflow-x: auto;
+      }
+      .section {
+        margin-top: 28px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        border: 1px solid #334155;
+        padding: 10px;
+        text-align: left;
+      }
+      th {
+        background: #1e293b;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New,
+          monospace;
+      }
+      a {
+        color: #93c5fd;
+      }
+      .footer {
+        margin-top: 28px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <section class="hero">
+        <h1>Eval Agent Skills Catalog</h1>
+        <p>
+          Curated, multi-vendor evaluation and observability skills for AI coding agents. Compatible with
+          Agent Skills format and installable with the open <code>skills</code> CLI.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="https://github.com/gyanesh-m/skills">View GitHub Repo</a>
+          <a class="btn" href="https://skills.sh/gyanesh-m/skills">View on skills.sh</a>
+        </div>
+        <pre><code>npx skills add gyanesh-m/skills</code></pre>
+      </section>
+
+      <section class="section">
+        <h2>Available Skills</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Skill</th>
+              <th>Vendor</th>
+              <th>Track</th>
+              <th>Focus</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <a href="https://github.com/gyanesh-m/skills/blob/master/skills/galileo-python-sdk/SKILL.md"
+                  >galileo-python-sdk</a
+                >
+              </td>
+              <td>Galileo</td>
+              <td>stable</td>
+              <td>Evaluate, observe, protect (Python)</td>
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="https://github.com/gyanesh-m/skills/blob/master/skills/galileo-typescript-sdk/SKILL.md"
+                  >galileo-typescript-sdk</a
+                >
+              </td>
+              <td>Galileo</td>
+              <td>stable</td>
+              <td>Evaluate + observe (TypeScript/JS)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2>Popular prompts</h2>
+        <p>"Add Galileo observability and tracing to my Python agent workflow."</p>
+        <p>"Evaluate this RAG pipeline with guardrail metrics and score regressions."</p>
+        <p>"Instrument my TypeScript workflow with Galileo observe/evaluate steps."</p>
+      </section>
+
+      <section class="footer">
+        <p>
+          Resources:
+          <a href="https://agentskills.io">Agent Skills spec</a>,
+          <a href="https://github.com/vercel-labs/skills">skills CLI</a>,
+          <a href="https://skills.sh">skills.sh</a>,
+          <a href="https://docs.galileo.ai">Galileo docs</a>.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>
