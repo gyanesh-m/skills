@@ -6,7 +6,7 @@ compatibility: Requires Node.js 18+. Works with npm, yarn, or pnpm.
 metadata:
   author: gyanesh-m
   version: "1.0.0"
-  sdk-version: "latest"
+  sdk-version: "1.3.0"
   sdk-repo: https://github.com/rungalileo/galileo-js
   docs: https://docs.galileo.ai
 ---
