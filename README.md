@@ -26,6 +26,17 @@ This repository is designed to be installed with the open `skills` CLI and disco
 npx skills add gyanesh-m/skills
 ```
 
+## Landing page
+
+- Static landing page source: [`docs/index.html`](docs/index.html)
+- Local preview:
+
+```bash
+python3 -m http.server 4173 --directory docs
+```
+
+Then open `http://127.0.0.1:4173/`.
+
 ## Quick Start
 
 Install this catalog (interactive):
