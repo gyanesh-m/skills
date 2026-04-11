@@ -36,3 +36,20 @@ jobs:
             echo "❌ No SKILL.md files discovered under skills/"
             exit 1
           fi
+
+      - name: Pre-merge install test (skills CLI)
+        run: |
+          set -euo pipefail
+          TEST_DIR="$(mktemp -d)"
+          pushd "$TEST_DIR" >/dev/null
+
+          npx -y skills add "$GITHUB_WORKSPACE" --list -y
+          npx -y skills add "$GITHUB_WORKSPACE" --skill galileo-python-sdk --skill galileo-typescript-sdk -a codex -a claude-code --copy -y
+
+          test -f "./.agents/skills/galileo-python-sdk/SKILL.md"
+          test -f "./.agents/skills/galileo-typescript-sdk/SKILL.md"
+          test -f "./.claude/skills/galileo-python-sdk/SKILL.md"
+          test -f "./.claude/skills/galileo-typescript-sdk/SKILL.md"
+
+          rg -n "^name: galileo-python-sdk" "./.agents/skills/galileo-python-sdk/SKILL.md" "./.claude/skills/galileo-python-sdk/SKILL.md"
+          rg -n "^name: galileo-typescript-sdk" "./.agents/skills/galileo-typescript-sdk/SKILL.md" "./.claude/skills/galileo-typescript-sdk/SKILL.md"
