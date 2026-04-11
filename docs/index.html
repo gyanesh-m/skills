@@ -1,174 +1,1115 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eval Agent Skills Catalog</title>
-    <meta
-      name="description"
-      content="Curated multi-vendor evaluation and observability skills for AI coding agents."
-    />
-    <meta property="og:title" content="Eval Agent Skills Catalog" />
-    <meta
-      property="og:description"
-      content="Install open agent skills for evaluation and observability workflows."
-    />
+    <title>gyanesh-m/skills — Agent Skills Catalog</title>
+    <meta name="description" content="Open catalog of evaluation and observability skills for AI coding agents. One install, any agent." />
+    <meta property="og:title" content="gyanesh-m/skills — Agent Skills Catalog" />
+    <meta property="og:description" content="Open catalog of evaluation and observability skills for AI coding agents. One install, any agent." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://github.com/gyanesh-m/skills" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-      :root {
-        color-scheme: light dark;
-      }
-      body {
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-          sans-serif;
+      *, *::before, *::after {
+        box-sizing: border-box;
         margin: 0;
-        background: #0b1020;
-        color: #e5e7eb;
+        padding: 0;
       }
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 40px 20px 64px;
+
+      :root {
+        --bg: #000;
+        --fg: #ededed;
+        --gray-100: #1a1a1a;
+        --gray-200: #1f1f1f;
+        --gray-300: #292929;
+        --gray-400: #3d3d3d;
+        --gray-500: #525252;
+        --gray-600: #878787;
+        --gray-700: #a0a0a0;
+        --gray-800: #bababa;
+        --gray-900: #d4d4d4;
+        --gray-1000: #ededed;
+        --blue: #52a8ff;
+        --green: #45d483;
+        --radius: 0.5rem;
+        --mono: 'Geist Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+        --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
       }
-      h1,
-      h2 {
-        margin: 0 0 12px;
-      }
-      p {
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        font-family: var(--sans);
+        background: var(--bg);
+        color: var(--fg);
         line-height: 1.6;
-        color: #cbd5e1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
       }
-      .hero {
-        padding: 28px;
-        border: 1px solid #334155;
-        border-radius: 14px;
-        background: linear-gradient(180deg, #0f172a, #111827);
+
+      a { color: inherit; text-decoration: none; }
+
+      .container {
+        max-width: 1152px;
+        margin: 0 auto;
+        padding: 0 24px;
       }
-      .cta-row {
+
+      @media (min-width: 640px) {
+        .container { padding: 0 32px; }
+      }
+
+      /* ── Header ── */
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        height: 56px;
         display: flex;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .header-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--fg);
+        letter-spacing: -0.3px;
+      }
+
+      .header-sep {
+        color: var(--gray-400);
+        font-weight: 300;
+        font-size: 20px;
+        user-select: none;
+      }
+
+      .header-title {
+        font-family: var(--mono);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--gray-700);
+      }
+
+      .header-nav {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .header-nav a {
+        font-size: 13px;
+        color: var(--gray-600);
+        transition: color 150ms;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .header-nav a:hover { color: var(--fg); }
+      }
+
+      .header-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .header-badge-new {
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: var(--blue);
+        color: #000;
+      }
+
+      /* ── Hero ── */
+      .hero {
+        padding: 80px 0 64px;
+      }
+
+      .hero-grid {
+        display: grid;
+        gap: 40px;
+      }
+
+      @media (min-width: 1024px) {
+        .hero-grid {
+          grid-template-columns: auto 1fr;
+          gap: 56px;
+          align-items: start;
+        }
+      }
+
+      /* ASCII Art */
+      .ascii-art {
+        font-family: var(--mono);
+        font-size: 12px;
+        line-height: 1.2;
+        letter-spacing: -1px;
+        color: var(--gray-500);
+        white-space: pre;
+        user-select: none;
+        position: relative;
+      }
+
+      @media (min-width: 1024px) {
+        .ascii-art { font-size: 15px; }
+      }
+
+      .ascii-art .highlight {
+        color: var(--gray-700);
+      }
+
+      .hero-content {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .hero-tagline {
+        font-family: var(--mono);
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--gray-600);
+        font-weight: 500;
+      }
+
+      @media (min-width: 1024px) {
+        .hero-tagline { font-size: 19px; }
+      }
+
+      .hero-description {
+        font-size: 20px;
+        line-height: 1.5;
+        color: var(--gray-600);
+        max-width: 560px;
+      }
+
+      @media (min-width: 640px) {
+        .hero-description { font-size: 24px; }
+      }
+
+      @media (min-width: 1024px) {
+        .hero-description { font-size: 28px; }
+      }
+
+      /* Command box */
+      .command-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        border-radius: var(--radius);
+        background: var(--gray-100);
+        border: 1px solid var(--gray-200);
+        font-family: var(--mono);
+        font-size: 14px;
+        max-width: 480px;
+        cursor: pointer;
+        transition: border-color 150ms, background 150ms;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .command-box:hover {
+          border-color: var(--gray-300);
+          background: var(--gray-200);
+        }
+      }
+
+      .command-box:active { transform: scale(0.995); }
+
+      .command-prefix {
+        color: var(--gray-500);
+        user-select: none;
+      }
+
+      .command-text { color: var(--gray-900); flex: 1; }
+      .command-text .cmd-highlight { color: var(--fg); }
+
+      .command-copy {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background: var(--gray-300);
+        border: none;
+        color: var(--gray-600);
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: color 150ms, background 150ms;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .command-copy:hover {
+          color: var(--fg);
+          background: var(--gray-400);
+        }
+      }
+
+      /* Agent carousel */
+      .agents-carousel {
+        position: relative;
+        margin-top: 8px;
+        max-width: 480px;
+      }
+
+      .agents-carousel-inner {
+        display: flex;
+        gap: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 16px 0;
+      }
+
+      .agents-carousel-inner::-webkit-scrollbar { display: none; }
+
+      .agent-logo {
+        flex-shrink: 0;
+        width: 72px;
+        height: 72px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        filter: grayscale(1) brightness(0.5);
+        opacity: 0.5;
+        transition: filter 300ms, opacity 300ms;
+        cursor: default;
+      }
+
+      @media (min-width: 1024px) {
+        .agent-logo { width: 88px; height: 88px; }
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .agent-logo:hover {
+          filter: grayscale(0) brightness(1);
+          opacity: 1;
+        }
+      }
+
+      .agent-logo-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 13px;
+      }
+
+      .agent-logo-name {
+        font-size: 10px;
+        color: var(--gray-600);
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .al-claude { background: #d4a574; }
+      .al-cursor { background: #000; border: 1px solid var(--gray-300); }
+      .al-copilot { background: #000; border: 1px solid var(--gray-300); }
+      .al-codex { background: #000; border: 1px solid var(--gray-300); }
+      .al-amp { background: #000; border: 1px solid var(--gray-300); }
+      .al-roo { background: #000; border: 1px solid var(--gray-300); }
+      .al-opencode { background: #131010; border: 1px solid var(--gray-300); }
+      .al-gemini { background: #000; border: 1px solid var(--gray-300); }
+
+      .agent-logo-icon svg {
+        display: block;
+      }
+
+      .agents-fade-l,
+      .agents-fade-r {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 48px;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .agents-fade-l {
+        left: 0;
+        background: linear-gradient(90deg, var(--bg), transparent);
+      }
+
+      .agents-fade-r {
+        right: 0;
+        background: linear-gradient(270deg, var(--bg), transparent);
+      }
+
+      /* ── Divider ── */
+      .divider {
+        height: 1px;
+        background: var(--gray-200);
+      }
+
+      /* ── Section ── */
+      .section {
+        padding: 80px 0;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 32px;
         flex-wrap: wrap;
         gap: 12px;
-        margin-top: 16px;
       }
-      .btn {
+
+      .section-title {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--gray-600);
+        font-family: var(--mono);
+      }
+
+      .section-count {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--gray-500);
+      }
+
+      /* ── Skills list ── */
+      .skills-table-head {
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+        .skills-table-head {
+          display: grid;
+          grid-template-columns: 48px 1fr 120px 120px;
+          padding: 0 16px 12px;
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: var(--gray-500);
+          font-family: var(--mono);
+          border-bottom: 1px solid var(--gray-200);
+        }
+
+        .skills-table-head .col-right {
+          text-align: right;
+        }
+      }
+
+      .skill-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        padding: 20px 16px;
+        border-bottom: 1px solid var(--gray-200);
+        transition: background 150ms;
         text-decoration: none;
-        border: 1px solid #334155;
-        border-radius: 10px;
-        padding: 10px 14px;
-        color: #e5e7eb;
+        color: var(--fg);
       }
-      .btn.primary {
-        background: #2563eb;
-        border-color: #2563eb;
+
+      @media (min-width: 768px) {
+        .skill-row {
+          grid-template-columns: 48px 1fr 120px 120px;
+          align-items: center;
+          padding: 0;
+          height: 64px;
+        }
       }
-      pre {
-        margin-top: 16px;
-        padding: 14px;
-        border-radius: 10px;
-        background: #020617;
-        border: 1px solid #334155;
-        overflow-x: auto;
+
+      @media (hover: hover) and (pointer: fine) {
+        .skill-row:hover { background: var(--gray-100); }
       }
-      .section {
-        margin-top: 28px;
+
+      .skill-row:active { transform: scale(0.999); }
+
+      .skill-rank {
+        display: none;
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--gray-500);
+        font-weight: 500;
       }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 12px;
+
+      @media (min-width: 768px) {
+        .skill-rank { display: block; }
+      }
+
+      .skill-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .skill-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--mono);
+        font-weight: 600;
+        font-size: 12px;
+        flex-shrink: 0;
+      }
+
+      .si-py {
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        color: #818cf8;
+      }
+
+      .si-ts {
+        background: rgba(59, 130, 246, 0.12);
+        border: 1px solid rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+      }
+
+      .skill-text { min-width: 0; }
+
+      .skill-name {
+        font-weight: 600;
         font-size: 14px;
+        color: var(--fg);
+        letter-spacing: -0.2px;
       }
-      th,
-      td {
-        border: 1px solid #334155;
-        padding: 10px;
-        text-align: left;
+
+      .skill-repo {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--gray-500);
+        margin-top: 1px;
       }
-      th {
-        background: #1e293b;
+
+      .skill-lang {
+        display: none;
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--gray-600);
       }
-      code {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New,
-          monospace;
+
+      @media (min-width: 768px) {
+        .skill-lang { display: block; }
       }
-      a {
-        color: #93c5fd;
+
+      .skill-status {
+        display: none;
+        font-family: var(--mono);
+        font-size: 13px;
+        text-align: right;
       }
+
+      @media (min-width: 768px) {
+        .skill-status { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+      }
+
+      .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .status-text { color: var(--gray-600); }
+
+      .skill-row-cta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 20px 16px;
+        border-bottom: 1px solid var(--gray-200);
+        color: var(--gray-500);
+        font-size: 14px;
+        transition: background 150ms, color 150ms;
+        text-decoration: none;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .skill-row-cta:hover { background: var(--gray-100); color: var(--gray-700); }
+      }
+
+      .skill-row-cta:active { transform: scale(0.999); }
+
+      .cta-plus {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        background: var(--gray-100);
+        border: 1px dashed var(--gray-400);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray-500);
+        font-size: 16px;
+        font-weight: 300;
+      }
+
+      .cta-separator {
+        color: var(--gray-400);
+        margin: 0 4px;
+      }
+
+      /* ── Features ── */
+      .features-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1px;
+        background: var(--gray-200);
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      @media (min-width: 768px) {
+        .features-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+
+      .feature-cell {
+        padding: 32px 28px;
+        background: var(--bg);
+        transition: background 200ms;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .feature-cell:hover { background: var(--gray-100); }
+      }
+
+      .feature-cell h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--fg);
+        margin-bottom: 8px;
+        letter-spacing: -0.2px;
+      }
+
+      .feature-cell p {
+        font-size: 14px;
+        color: var(--gray-600);
+        line-height: 1.6;
+      }
+
+      .feature-icon-sm {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+        background: var(--gray-100);
+        border: 1px solid var(--gray-200);
+      }
+
+      /* ── How it works ── */
+      .steps-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1px;
+        background: var(--gray-200);
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      @media (min-width: 768px) {
+        .steps-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+
+      .step-cell {
+        padding: 32px 28px;
+        background: var(--bg);
+      }
+
+      .step-num {
+        font-family: var(--mono);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-500);
+        margin-bottom: 16px;
+        display: block;
+      }
+
+      .step-cell h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--fg);
+        margin-bottom: 8px;
+        letter-spacing: -0.2px;
+      }
+
+      .step-cell p {
+        font-size: 14px;
+        color: var(--gray-600);
+        line-height: 1.6;
+      }
+
+      .step-cell code {
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: var(--gray-100);
+        border: 1px solid var(--gray-200);
+        color: var(--gray-800);
+      }
+
+      /* ── Prompts ── */
+      .prompts-list {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .prompt-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--gray-200);
+      }
+
+      .prompt-row:last-child { border-bottom: none; }
+
+      .prompt-arrow {
+        flex-shrink: 0;
+        color: var(--gray-400);
+        margin-top: 2px;
+      }
+
+      .prompt-text {
+        font-size: 15px;
+        color: var(--gray-700);
+        line-height: 1.6;
+      }
+
+      .prompt-tag {
+        display: inline-block;
+        margin-left: 8px;
+        font-size: 11px;
+        font-family: var(--mono);
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: var(--gray-100);
+        border: 1px solid var(--gray-200);
+        color: var(--gray-500);
+        vertical-align: middle;
+      }
+
+      /* ── Footer ── */
       .footer {
-        margin-top: 28px;
-        font-size: 14px;
+        padding: 40px 0;
+        border-top: 1px solid var(--gray-200);
+      }
+
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .footer-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .footer-brand {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--gray-600);
+        font-weight: 500;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .footer-links a {
+        font-size: 13px;
+        color: var(--gray-500);
+        transition: color 150ms;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .footer-links a:hover { color: var(--gray-800); }
+      }
+
+      .footer-right {
+        font-size: 12px;
+        color: var(--gray-500);
+        font-family: var(--mono);
+      }
+
+      /* ── Animations ── */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .animate-in {
+        opacity: 0;
+        animation: fadeIn 500ms var(--ease-out) both;
+      }
+
+      .delay-1 { animation-delay: 0ms; }
+      .delay-2 { animation-delay: 80ms; }
+      .delay-3 { animation-delay: 160ms; }
+      .delay-4 { animation-delay: 240ms; }
+      .delay-5 { animation-delay: 320ms; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .animate-in {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* ── Mobile ── */
+      @media (max-width: 640px) {
+        .header-nav a:not(:last-child) { display: none; }
+        .hero { padding: 48px 0 40px; }
+        .section { padding: 48px 0; }
+        .ascii-art { font-size: 10px; }
       }
     </style>
   </head>
   <body>
-    <main class="container">
-      <section class="hero">
-        <h1>Eval Agent Skills Catalog</h1>
-        <p>
-          Curated, multi-vendor evaluation and observability skills for AI coding agents. Compatible with
-          Agent Skills format and installable with the open <code>skills</code> CLI.
-        </p>
-        <div class="cta-row">
-          <a class="btn primary" href="https://github.com/gyanesh-m/skills">View GitHub Repo</a>
-          <a class="btn" href="https://skills.sh/gyanesh-m/skills">View on skills.sh</a>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="container header-inner">
+        <div class="header-left">
+          <a href="https://github.com/gyanesh-m" class="header-logo">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="var(--fg)"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            gyanesh-m
+          </a>
+          <span class="header-sep">/</span>
+          <a href="#" class="header-title">skills</a>
         </div>
-        <pre><code>npx skills add gyanesh-m/skills</code></pre>
-      </section>
+        <nav class="header-nav">
+          <a href="#skills" class="header-badge">
+            Catalog
+            <span class="header-badge-new">2</span>
+          </a>
+          <a href="https://github.com/gyanesh-m/skills" target="_blank" rel="noopener">GitHub</a>
+        </nav>
+      </div>
+    </header>
 
+    <!-- Hero -->
+    <div class="container">
+      <section class="hero">
+        <div class="hero-grid animate-in delay-1">
+          <!-- ASCII Art -->
+          <div class="ascii-art" aria-hidden="true"><span class="highlight"> ___  _  _ ___ _     _     ___
+/ __|| |/ /|_ _| |   | |   / __|
+\__ \|   <  | || |__ | |__ \__ \
+|___/|_|\_\|___|____||____||___/</span></div>
+
+          <!-- Content -->
+          <div class="hero-content">
+            <div class="hero-tagline animate-in delay-2">Open Agent Skills Catalog</div>
+
+            <p class="hero-description animate-in delay-3">
+              Curated skills for <strong style="color: var(--fg);">evaluation</strong>,
+              <strong style="color: var(--fg);">observability</strong>, and
+              <strong style="color: var(--fg);">protection</strong>&nbsp;&mdash;
+              installed in one command, compatible with any&nbsp;agent.
+            </p>
+
+            <!-- Install command -->
+            <div class="animate-in delay-4">
+              <div class="command-box" onclick="navigator.clipboard.writeText('npx skills add gyanesh-m/skills').then(()=>{const b=this.querySelector('.command-copy');b.innerHTML='<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><polyline points=&quot;20 6 9 17 4 12&quot;/></svg>';setTimeout(()=>{b.innerHTML='<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;2&quot;><rect x=&quot;9&quot; y=&quot;9&quot; width=&quot;13&quot; height=&quot;13&quot; rx=&quot;2&quot;/><path d=&quot;M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1&quot;/></svg>'},1500)})">
+                <span class="command-prefix">$</span>
+                <span class="command-text">npx <span class="cmd-highlight">skills add</span> gyanesh-m/skills</span>
+                <button class="command-copy" aria-label="Copy command">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Agent carousel -->
+            <div class="agents-carousel animate-in delay-5">
+              <div class="agents-fade-l"></div>
+              <div class="agents-carousel-inner">
+                <div class="agent-logo">
+                  <div class="agent-logo-icon al-claude">
+                    <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#fff" d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg>
+                  </div>
+                  <span class="agent-logo-name">Claude</span>
+                </div>
+                <div class="agent-logo">
+                  <div class="agent-logo-icon al-cursor">
+                    <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#fff" d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/></svg>
+                  </div>
+                  <span class="agent-logo-name">Cursor</span>
+                </div>
+                <div class="agent-logo">
+                  <div class="agent-logo-icon al-copilot">
+                    <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#fff" d="M23.922 16.997C23.061 18.492 18.063 22.02 12 22.02 5.937 22.02.939 18.492.078 16.997A.641.641 0 0 1 0 16.741v-2.869a.883.883 0 0 1 .053-.22c.372-.935 1.347-2.292 2.605-2.656.167-.429.414-1.055.644-1.517a10.098 10.098 0 0 1-.052-1.086c0-1.331.282-2.499 1.132-3.368.397-.406.89-.717 1.474-.952C7.255 2.937 9.248 1.98 11.978 1.98c2.731 0 4.767.957 6.166 2.093.584.235 1.077.546 1.474.952.85.869 1.132 2.037 1.132 3.368 0 .368-.014.733-.052 1.086.23.462.477 1.088.644 1.517 1.258.364 2.233 1.721 2.605 2.656a.841.841 0 0 1 .053.22v2.869a.641.641 0 0 1-.078.256Zm-11.75-5.992h-.344a4.359 4.359 0 0 1-.355.508c-.77.947-1.918 1.492-3.508 1.492-1.725 0-2.989-.359-3.782-1.259a2.137 2.137 0 0 1-.085-.104L4 11.746v6.585c1.435.779 4.514 2.179 8 2.179 3.486 0 6.565-1.4 8-2.179v-6.585l-.098-.104s-.033.045-.085.104c-.793.9-2.057 1.259-3.782 1.259-1.59 0-2.738-.545-3.508-1.492a4.359 4.359 0 0 1-.355-.508Zm2.328 3.25c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm-5 0c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Z"/></svg>
+                  </div>
+                  <span class="agent-logo-name">Copilot</span>
+                </div>
+                <div class="agent-logo">
+                  <div class="agent-logo-icon al-codex">
+                    <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#fff" d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>
+                  </div>
+                  <span class="agent-logo-name">Codex</span>
+                </div>
+                <div class="agent-logo">
+                  <div class="agent-logo-icon al-amp">
+                    <svg viewBox="0 0 21 21" width="18" height="18" fill="none"><path d="M3.76879 18.3015L8.49839 13.505L10.2196 20.0399L12.72 19.3561L10.2288 9.86749L0.890876 7.33844L0.22594 9.89331L6.65134 11.6388L1.94138 16.4282L3.76879 18.3015Z" fill="#F34E3F"/><path d="M17.4074 12.7414L19.9078 12.0575L17.4167 2.56897L8.07873 0.0399246L7.4138 2.5948L15.2992 4.73685L17.4074 12.7414Z" fill="#F34E3F"/><path d="M13.8184 16.3883L16.3188 15.7044L13.8276 6.21588L4.48971 3.68683L3.82477 6.24171L11.7101 8.38376L13.8184 16.3883Z" fill="#F34E3F"/></svg>
+                  </div>
+                  <span class="agent-logo-name">Amp</span>
+                </div>
+                <div class="agent-logo">
+                  <div class="agent-logo-icon al-roo">
+                    <svg viewBox="0 0 96 96" width="18" height="18"><path fill="#fff" d="M78.99,21.9l-1.73,6.24c-.09.33-.44.52-.77.42l-28.11-8.71c-.19-.06-.41-.02-.56.11l-28.95,23.22c-.08.07-.18.11-.29.13l-17.25,2.66c-.31.05-.53.32-.52.63l.11,2.47c.01.31.26.56.57.58l20.08,1.23c.11,0,.22-.02.31-.06l14.64-7.4c.21-.11.46-.08.64.06l9.37,7.03c.16.12.25.3.24.49l-.09,11.65c0,.13.04.25.11.35l14.74,21.15c.11.16.3.26.5.26h5.03c.46,0,.76-.5.54-.9l-10.87-19.92c-.1-.18-.1-.4,0-.58l5.51-10.48c.06-.11.15-.2.26-.26l19.56-9.92c.2-.1.43-.09.62.04l5.6,3.73c.1.07.22.1.34.1h5.15c.48,0,.77-.52.52-.93l-14.2-23.52c-.28-.46-.97-.36-1.11.15Z"/></svg>
+                  </div>
+                  <span class="agent-logo-name">Roo</span>
+                </div>
+                <div class="agent-logo">
+                  <div class="agent-logo-icon al-opencode">
+                    <svg viewBox="0 0 512 512" width="18" height="18"><path d="M320 224V352H192V224H320Z" fill="#5A5858"/><path fill-rule="evenodd" clip-rule="evenodd" d="M384 416H128V96H384V416ZM320 160H192V352H320V160Z" fill="white"/></svg>
+                  </div>
+                  <span class="agent-logo-name">OpenCode</span>
+                </div>
+                <div class="agent-logo">
+                  <div class="agent-logo-icon al-gemini">
+                    <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#8E75B2" d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg>
+                  </div>
+                  <span class="agent-logo-name">Gemini</span>
+                </div>
+              </div>
+              <div class="agents-fade-r"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Skills catalog -->
+    <div class="container">
+      <section class="section" id="skills">
+        <div class="section-header">
+          <span class="section-title">Skills Catalog</span>
+          <span class="section-count">2 skills &middot; stable</span>
+        </div>
+
+        <div class="skills-table-head">
+          <span>#</span>
+          <span>Skill</span>
+          <span>Language</span>
+          <span class="col-right">Status</span>
+        </div>
+
+        <a class="skill-row" href="https://github.com/gyanesh-m/skills/blob/master/skills/galileo-python-sdk/SKILL.md" target="_blank" rel="noopener">
+          <span class="skill-rank">1</span>
+          <div class="skill-info">
+            <div class="skill-icon si-py">Py</div>
+            <div class="skill-text">
+              <div class="skill-name">galileo-python-sdk</div>
+              <div class="skill-repo">gyanesh-m/skills</div>
+            </div>
+          </div>
+          <span class="skill-lang">Python 3.9+</span>
+          <div class="skill-status">
+            <span class="status-dot"></span>
+            <span class="status-text">stable</span>
+          </div>
+        </a>
+
+        <a class="skill-row" href="https://github.com/gyanesh-m/skills/blob/master/skills/galileo-typescript-sdk/SKILL.md" target="_blank" rel="noopener">
+          <span class="skill-rank">2</span>
+          <div class="skill-info">
+            <div class="skill-icon si-ts">TS</div>
+            <div class="skill-text">
+              <div class="skill-name">galileo-typescript-sdk</div>
+              <div class="skill-repo">gyanesh-m/skills</div>
+            </div>
+          </div>
+          <span class="skill-lang">Node 18+</span>
+          <div class="skill-status">
+            <span class="status-dot"></span>
+            <span class="status-text">stable</span>
+          </div>
+        </a>
+
+        <a class="skill-row-cta" href="https://github.com/gyanesh-m/skills/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener">
+          <span class="cta-plus">+</span>
+          More integrations coming soon
+          <span class="cta-separator">&middot;</span>
+          <span style="color: var(--gray-700);">Contribute a skill</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
+      </section>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Example prompts -->
+    <div class="container">
       <section class="section">
-        <h2>Available Skills</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Skill</th>
-              <th>Vendor</th>
-              <th>Track</th>
-              <th>Focus</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <a href="https://github.com/gyanesh-m/skills/blob/master/skills/galileo-python-sdk/SKILL.md"
-                  >galileo-python-sdk</a
-                >
-              </td>
-              <td>Galileo</td>
-              <td>stable</td>
-              <td>Evaluate, observe, protect (Python)</td>
-            </tr>
-            <tr>
-              <td>
-                <a
-                  href="https://github.com/gyanesh-m/skills/blob/master/skills/galileo-typescript-sdk/SKILL.md"
-                  >galileo-typescript-sdk</a
-                >
-              </td>
-              <td>Galileo</td>
-              <td>stable</td>
-              <td>Evaluate + observe (TypeScript/JS)</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+        <div class="section-header">
+          <span class="section-title">Try These Prompts</span>
+        </div>
 
+        <div class="prompts-list">
+          <div class="prompt-row">
+            <svg class="prompt-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <p class="prompt-text">
+              Add Galileo observability and tracing to my Python agent workflow.
+              <span class="prompt-tag">observability</span>
+            </p>
+          </div>
+          <div class="prompt-row">
+            <svg class="prompt-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <p class="prompt-text">
+              Evaluate this RAG pipeline with guardrail metrics and score regressions.
+              <span class="prompt-tag">evaluation</span>
+            </p>
+          </div>
+          <div class="prompt-row">
+            <svg class="prompt-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <p class="prompt-text">
+              Instrument my TypeScript workflow with Galileo observe and evaluate steps.
+              <span class="prompt-tag">typescript</span>
+            </p>
+          </div>
+          <div class="prompt-row">
+            <svg class="prompt-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <p class="prompt-text">
+              Add guardrails and content filtering stages to my production agent.
+              <span class="prompt-tag">protection</span>
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Features -->
+    <div class="container">
       <section class="section">
-        <h2>Popular prompts</h2>
-        <p>"Add Galileo observability and tracing to my Python agent workflow."</p>
-        <p>"Evaluate this RAG pipeline with guardrail metrics and score regressions."</p>
-        <p>"Instrument my TypeScript workflow with Galileo observe/evaluate steps."</p>
-      </section>
+        <div class="section-header">
+          <span class="section-title">What's Inside</span>
+        </div>
 
-      <section class="footer">
-        <p>
-          Resources:
-          <a href="https://agentskills.io">Agent Skills spec</a>,
-          <a href="https://github.com/vercel-labs/skills">skills CLI</a>,
-          <a href="https://skills.sh">skills.sh</a>,
-          <a href="https://docs.galileo.ai">Galileo docs</a>.
-        </p>
+        <div class="features-grid">
+          <div class="feature-cell">
+            <div class="feature-icon-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <h3>Evaluate</h3>
+            <p>Run experiments, score regressions, and test RAG pipelines against ground truth with built-in metrics and scorers.</p>
+          </div>
+          <div class="feature-cell">
+            <div class="feature-icon-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Observe</h3>
+            <p>Trace workflows end-to-end, log structured spans, and monitor production agents with deep observability.</p>
+          </div>
+          <div class="feature-cell">
+            <div class="feature-icon-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Protect</h3>
+            <p>Add guardrails, content filtering, and safety stages to catch issues before they ever reach your users.</p>
+          </div>
+        </div>
       </section>
-    </main>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- How it works -->
+    <div class="container">
+      <section class="section">
+        <div class="section-header">
+          <span class="section-title">How It Works</span>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-cell">
+            <span class="step-num">01</span>
+            <h3>Install the catalog</h3>
+            <p>Run <code>npx skills add gyanesh-m/skills</code> in your project. Skills are copied into your agent's skill directory.</p>
+          </div>
+          <div class="step-cell">
+            <span class="step-num">02</span>
+            <h3>Agent reads the skill</h3>
+            <p>When your agent works on a relevant task, it reads the skill reference for API patterns, best practices, and integration details.</p>
+          </div>
+          <div class="step-cell">
+            <span class="step-num">03</span>
+            <h3>Ship with confidence</h3>
+            <p>Your agent writes instrumented, evaluated, and protected code from the start&nbsp;&mdash; no copy-pasting from docs.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Footer -->
+    <div class="container">
+      <footer class="footer">
+        <div class="footer-inner">
+          <div class="footer-left">
+            <span class="footer-brand">gyanesh-m/skills</span>
+            <div class="footer-links">
+              <a href="https://agentskills.io" target="_blank" rel="noopener">Agent Skills spec</a>
+              <a href="https://github.com/vercel-labs/skills" target="_blank" rel="noopener">skills CLI</a>
+              <a href="https://skills.sh/gyanesh-m/skills" target="_blank" rel="noopener">skills.sh</a>
+              <a href="https://github.com/gyanesh-m/skills/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a>
+            </div>
+          </div>
+          <span class="footer-right">MIT &middot; 2026</span>
+        </div>
+      </footer>
+    </div>
+
   </body>
 </html>
