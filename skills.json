@@ -1,0 +1,14 @@
+{
+  "skills": [
+    {
+      "name": "galileo-python-sdk",
+      "path": "skills/galileo-python-sdk",
+      "description": "Galileo AI platform Python SDK for evaluation, observability, and guardrails"
+    },
+    {
+      "name": "galileo-typescript-sdk",
+      "path": "skills/galileo-typescript-sdk",
+      "description": "Galileo AI platform TypeScript/JS SDK for evaluation, observability, and guardrails"
+    }
+  ]
+}

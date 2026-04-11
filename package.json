@@ -1,0 +1,27 @@
+{
+  "name": "eval-agent-skills",
+  "version": "1.0.0",
+  "description": "Curated multi-vendor evaluation and observability skills for AI coding agents",
+  "scripts": {
+    "lint": "node scripts/validate.js",
+    "test": "node scripts/validate.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gyanesh-m/skills.git"
+  },
+  "keywords": [
+    "catalog",
+    "multi-vendor",
+    "skills-sh",
+    "galileo",
+    "ai",
+    "evaluation",
+    "observability",
+    "guardrails",
+    "agent-skills",
+    "llm"
+  ],
+  "author": "Gyanesh Malhotra",
+  "license": "MIT"
+}

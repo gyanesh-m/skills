@@ -1,0 +1,55 @@
+name: Validate Skills
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate skill files
+        run: node scripts/validate.js
+
+      - name: Check markdown files exist
+        run: |
+          skill_count=0
+          while IFS= read -r skill_md; do
+            skill_dir=$(dirname "$skill_md")
+            skill_name=$(basename "$skill_dir")
+            echo "✅ $skill_name/SKILL.md exists ($skill_dir)"
+            skill_count=$((skill_count + 1))
+          done < <(find skills -type f -name "SKILL.md" -not -path "*/\.*/*")
+
+          if [ "$skill_count" -eq 0 ]; then
+            echo "❌ No SKILL.md files discovered under skills/"
+            exit 1
+          fi
+
+      - name: Pre-merge install test (skills CLI)
+        run: |
+          set -euo pipefail
+          TEST_DIR="$(mktemp -d)"
+          pushd "$TEST_DIR" >/dev/null
+
+          npx -y skills add "$GITHUB_WORKSPACE" --list -y
+          npx -y skills add "$GITHUB_WORKSPACE" --skill galileo-python-sdk --skill galileo-typescript-sdk -a codex -a claude-code --copy -y
+
+          test -f "./.agents/skills/galileo-python-sdk/SKILL.md"
+          test -f "./.agents/skills/galileo-typescript-sdk/SKILL.md"
+          test -f "./.claude/skills/galileo-python-sdk/SKILL.md"
+          test -f "./.claude/skills/galileo-typescript-sdk/SKILL.md"
+
+          grep -En "^name: galileo-python-sdk" "./.agents/skills/galileo-python-sdk/SKILL.md" "./.claude/skills/galileo-python-sdk/SKILL.md"
+          grep -En "^name: galileo-typescript-sdk" "./.agents/skills/galileo-typescript-sdk/SKILL.md" "./.claude/skills/galileo-typescript-sdk/SKILL.md"
