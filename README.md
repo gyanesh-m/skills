@@ -1,152 +1,87 @@
-# Galileo Skills
+# Eval Agent Skills Catalog
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-agentskills.io-blue)](https://agentskills.io)
 
-**Agent Skills for the Galileo AI platform** — give your AI coding assistant the knowledge to work with Galileo's evaluation, observability, and guardrails SDKs.
+Curated, multi-vendor evaluation and observability skills for AI coding agents.
+
+This repository is designed to be installed with the open `skills` CLI and discovered through the `skills.sh` ecosystem.
 
 ## Quick Start
 
-Install all Galileo skills into your project:
+Install this catalog:
 
 ```bash
-npx add-skill gyanesh-m/skills
+npx skills add gyanesh-m/skills
 ```
 
-Install a specific skill:
+List available skills:
 
 ```bash
-# Python SDK skill
-npx add-skill gyanesh-m/skills --skill galileo-python-sdk
-
-# TypeScript SDK skill
-npx add-skill gyanesh-m/skills --skill galileo-typescript-sdk
+npx skills add gyanesh-m/skills --list
 ```
 
-Target a specific AI assistant:
+Install specific skills:
 
 ```bash
-npx add-skill gyanesh-m/skills --agent cursor
-npx add-skill gyanesh-m/skills --agent claude
+npx skills add gyanesh-m/skills --skill galileo-python-sdk
+npx skills add gyanesh-m/skills --skill galileo-typescript-sdk
 ```
 
-## Supported AI Coding Assistants
+Install to specific agents:
 
-| Assistant | Supported | Skills Directory |
-|---|---|---|
-| Claude Code | ✅ | `.claude/skills/` |
-| Cursor | ✅ | `.cursor/skills/` |
-| GitHub Copilot | ✅ | `.github/skills/` |
-| OpenAI Codex | ✅ | `.agents/skills/` |
-| Gemini CLI | ✅ | `.gemini/skills/` |
-| Amp | ✅ | `.amp/skills/` |
-| Roo Code | ✅ | `.roo/skills/` |
-| OpenCode | ✅ | `.opencode/skills/` |
+```bash
+npx skills add gyanesh-m/skills -a claude-code -a cursor -a codex
+```
+
+## Catalog Layout
+
+The official `skills` CLI discovers skills in these locations:
+
+- `skills/`
+- `skills/.curated/`
+- `skills/.experimental/`
+- `skills/.system/`
+
+This repository currently keeps stable skills in `skills/` and supports curated and experimental tracks for future multi-vendor contributions.
 
 ## Available Skills
 
 ### `galileo-python-sdk`
 
-Complete reference for the Galileo Python SDK (`pip install galileo`). Covers:
+Galileo Python SDK guide for evaluate, observe, and protect workflows:
 
-- Observability and tracing with `galileo_context` and the `@log` decorator
-- Wrapped OpenAI client for automatic tracing
+- Observability and tracing with `galileo_context` and `@log`
+- Wrapped OpenAI client instrumentation
 - Evaluation experiments with `promptquality`
-- Runtime guardrails with `galileo-protect`
-- Framework integrations: OpenAI, Anthropic, LangChain, LangGraph, CrewAI, PydanticAI, Strands Agents, Google ADK
-- Guardrail metrics: Hallucination detection, Context Adherence, Toxicity, PII, Prompt Injection, and more
+- Runtime guardrails with Galileo Protect
+- Integrations across common Python agent frameworks
 
 ### `galileo-typescript-sdk`
 
-Complete reference for the Galileo TypeScript/JS SDK (`npm install @rungalileo/galileo`). Covers:
+Galileo TypeScript/JS SDK guide for evaluation and production monitoring:
 
-- `GalileoEvaluateWorkflow` for evaluation runs with scoring
-- `GalileoObserveWorkflow` for production monitoring
-- LLM, retriever, and tool step logging
-- Framework integrations: Vercel AI SDK, Mastra, LangGraph (JS)
-- All guardrail metrics available in evaluate mode
+- `GalileoEvaluateWorkflow` and scoring configuration
+- `GalileoObserveWorkflow` for production traces
+- LLM, retriever, and tool step logging patterns
+- Integration guidance for JS/TS agent stacks
 
-## Manual Installation
+## Submission Model
 
-If you prefer to install skills manually, copy the relevant `SKILL.md` and `references/` directory into your AI assistant's skills folder:
+This project is evolving into a curated multi-vendor index for eval skills:
 
-### Claude Code
+- `skills/.curated/` for reviewed, production-ready skills
+- `skills/.experimental/` for in-progress vendor submissions
+- `skills/.system/` for maintainer-only internal skills (optional)
 
-```bash
-mkdir -p .claude/skills/galileo-python-sdk
-cp -r skills/galileo-python-sdk/* .claude/skills/galileo-python-sdk/
-```
-
-### Cursor
-
-```bash
-mkdir -p .cursor/skills/galileo-python-sdk
-cp -r skills/galileo-python-sdk/* .cursor/skills/galileo-python-sdk/
-```
-
-### GitHub Copilot
-
-```bash
-mkdir -p .github/skills/galileo-python-sdk
-cp -r skills/galileo-python-sdk/* .github/skills/galileo-python-sdk/
-```
-
-## What is Galileo?
-
-[Galileo](https://galileo.ai) is an AI evaluation, observability, and guardrails platform. Their tagline: **"Evaluate, Observe, and Protect your GenAI applications."**
-
-| Product | Description |
-|---|---|
-| **Galileo Evaluate** | Run evaluation experiments on prompts, models, RAG pipelines, and agents using built-in and custom metrics |
-| **Galileo Observe** | Production observability for LLM/agent applications with tracing, spans, and metrics |
-| **Galileo Protect** | Runtime guardrails that scan prompts and responses, blocking harmful outputs with rulesets and stages |
-| **Guardrail Metrics** | Proprietary metrics like Hallucination Index, Context Adherence, Chunk Attribution, Toxicity, PII detection, and more |
-
-## Example Usage
-
-After installing the Galileo Python SDK skill, your AI assistant understands Galileo patterns:
-
-**You:** "Help me add Galileo observability to my LangGraph agent"
-
-**AI Assistant generates:**
-
-```python
-from galileo import galileo_context, log
-from galileo.openai import openai
-
-galileo_context.init(project="langraph-agent", log_stream="production")
-
-client = openai.OpenAI()
-
-@log
-def agent_pipeline(user_input: str):
-    context = retrieve_documents(user_input)
-    response = client.chat.completions.create(
-        messages=[{"role": "user", "content": f"Context: {context}\n\n{user_input}"}],
-        model="gpt-4o",
-    )
-    return response.choices[0].message.content
-
-@log(span_type="retriever")
-def retrieve_documents(query: str):
-    return vector_store.similarity_search(query, k=5)
-
-result = agent_pipeline("What are the benefits of RAG?")
-galileo_context.flush()
-```
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing new skills or improving existing ones.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for submission rules and naming conventions.
 
 ## Resources
 
-- **Galileo Documentation:** https://docs.galileo.ai
-- **Galileo Console:** https://app.galileo.ai
-- **Python SDK:** https://github.com/rungalileo/galileo-python
-- **TypeScript SDK:** https://github.com/rungalileo/galileo-js
-- **SDK Examples:** https://github.com/rungalileo/sdk-examples
-- **Agent Skills Spec:** https://agentskills.io
+- Agent Skills specification: https://agentskills.io
+- Open `skills` CLI: https://github.com/vercel-labs/skills
+- Skills directory: https://skills.sh
+- Galileo docs: https://docs.galileo.ai
 
 ## License
 

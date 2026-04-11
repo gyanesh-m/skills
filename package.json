@@ -1,11 +1,7 @@
 {
-  "name": "galileo-skills",
+  "name": "eval-agent-skills",
   "version": "1.0.0",
-  "description": "Agent Skills for the Galileo AI platform — teach your AI coding assistant to use Galileo SDKs",
-  "main": "src/index.js",
-  "bin": {
-    "add-skill": "src/index.js"
-  },
+  "description": "Curated multi-vendor evaluation and observability skills for AI coding agents",
   "scripts": {
     "lint": "node scripts/validate.js",
     "test": "node scripts/validate.js"
@@ -15,6 +11,9 @@
     "url": "https://github.com/gyanesh-m/skills.git"
   },
   "keywords": [
+    "catalog",
+    "multi-vendor",
+    "skills-sh",
     "galileo",
     "ai",
     "evaluation",

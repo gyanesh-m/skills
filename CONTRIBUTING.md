@@ -1,14 +1,19 @@
-# Contributing to Galileo Skills
+# Contributing to the Eval Agent Skills Catalog
 
-Thank you for your interest in contributing! This guide explains how to add new skills or improve existing ones.
+Thank you for your interest in contributing! This guide explains how to add new skills or improve existing ones in this curated multi-vendor eval catalog.
 
 ## How Skills Are Structured
 
-Each skill lives in its own directory under `skills/`:
+Each skill lives in its own directory under one of the catalog tracks:
+
+- `skills/` for stable top-level entries
+- `skills/.curated/` for reviewed multi-vendor entries
+- `skills/.experimental/` for draft/in-progress entries
 
 ```
 skills/
-└── my-skill-name/
+└── .curated/
+    └── vendor-skill-name/
     ├── SKILL.md              # Main skill file (required)
     └── references/           # Additional reference files (optional)
         ├── INTEGRATIONS.md
@@ -42,12 +47,11 @@ Place additional reference files in a `references/` subdirectory. These are link
 
 ## Adding a New Skill
 
-1. **Create a directory** under `skills/` with a lowercase, hyphenated name.
+1. **Create a directory** under `skills/.experimental/` (or `skills/.curated/` if already reviewed) with a lowercase, hyphenated, vendor-prefixed name (for example: `galileo-rag-eval`).
 2. **Write `SKILL.md`** with the required YAML frontmatter and comprehensive Markdown body.
 3. **Add reference files** in `references/` if the skill covers multiple topics.
 4. **Register the skill** in `skills.json` at the repository root.
-5. **Update `src/index.js`** to include the new skill's file list in `SKILLS_MANIFEST`.
-6. **Update `README.md`** to list the new skill under "Available Skills."
+5. **Update `README.md`** to list the new skill under "Available Skills" if it is curated/stable.
 
 ## Testing Skills Locally
 
@@ -62,11 +66,11 @@ This validates:
 - Skill names match their directory names
 - Referenced paths exist
 
-To test the installer locally:
+To test catalog discovery locally with the official CLI:
 
 ```bash
-node src/index.js --list
-node src/index.js --skill your-skill-name --agent cursor
+npx skills add gyanesh-m/skills --list
+npx skills add gyanesh-m/skills --skill your-skill-name
 ```
 
 ## Pull Request Process

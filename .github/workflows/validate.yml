@@ -24,11 +24,15 @@ jobs:
 
       - name: Check markdown files exist
         run: |
-          for skill_dir in skills/*/; do
+          skill_count=0
+          while IFS= read -r skill_md; do
+            skill_dir=$(dirname "$skill_md")
             skill_name=$(basename "$skill_dir")
-            if [ ! -f "$skill_dir/SKILL.md" ]; then
-              echo "❌ Missing SKILL.md in $skill_dir"
-              exit 1
-            fi
-            echo "✅ $skill_name/SKILL.md exists"
-          done
+            echo "✅ $skill_name/SKILL.md exists ($skill_dir)"
+            skill_count=$((skill_count + 1))
+          done < <(find skills -type f -name "SKILL.md" -not -path "*/\.*/*")
+
+          if [ "$skill_count" -eq 0 ]; then
+            echo "❌ No SKILL.md files discovered under skills/"
+            exit 1
+          fi

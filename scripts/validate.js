@@ -47,7 +47,7 @@ function validateFrontmatter(content, skillName) {
 }
 
 function main() {
-  console.log("\n  Galileo Skills Validator\n");
+  console.log("\n  Eval Skills Catalog Validator\n");
 
   const manifestPath = path.join(__dirname, "..", "skills.json");
   if (!fs.existsSync(manifestPath)) {
