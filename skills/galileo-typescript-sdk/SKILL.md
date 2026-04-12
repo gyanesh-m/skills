@@ -210,12 +210,12 @@ await flush();
 Use `runExperiment` to evaluate your LLM pipeline against a dataset with automated scoring:
 
 ```typescript
-import { runExperiment } from "galileo";
+import { runExperiment, GalileoMetrics } from "galileo";
 
 const result = await runExperiment({
   name: "qa-eval-run",
   datasetName: "my-test-dataset",
-  metrics: ["context_adherence", "completeness", "toxicity"],
+  metrics: [GalileoMetrics.contextAdherence, GalileoMetrics.completeness, GalileoMetrics.inputToxicity],
   projectName: "eval-project",
   function: async (input) => {
     const response = await callYourLLM(input.question);
@@ -229,7 +229,7 @@ console.log("Experiment link:", result.link);
 ### Experiment with Inline Dataset
 
 ```typescript
-import { runExperiment } from "galileo";
+import { runExperiment, GalileoMetrics } from "galileo";
 
 const result = await runExperiment({
   name: "rag-eval",
@@ -237,7 +237,7 @@ const result = await runExperiment({
     { question: "What is ML?", expected: "Machine learning is..." },
     { question: "Explain AI", expected: "Artificial intelligence is..." },
   ],
-  metrics: ["context_adherence", "chunk_attribution_utilization", "completeness"],
+  metrics: [GalileoMetrics.contextAdherence, GalileoMetrics.chunkAttributionUtilization, GalileoMetrics.completeness],
   projectName: "eval-project",
   function: async (input) => {
     const docs = await retrieve(input.question);
@@ -249,14 +249,14 @@ const result = await runExperiment({
 ### Experiment with Prompt Template
 
 ```typescript
-import { runExperiment } from "galileo";
+import { runExperiment, GalileoMetrics } from "galileo";
 
 const result = await runExperiment({
   name: "prompt-eval",
   datasetName: "my-test-dataset",
   promptTemplate: { id: "your-prompt-template-id" },
   promptSettings: { model_alias: "GPT-4o", temperature: 0.7 },
-  metrics: ["correctness", "instruction_adherence"],
+  metrics: [GalileoMetrics.correctness, GalileoMetrics.instructionAdherence],
   projectName: "eval-project",
 });
 ```

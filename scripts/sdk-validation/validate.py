@@ -389,8 +389,27 @@ def extract_typescript_surface(sdk_dir):
 def _parse_dts_classes(filepath, surface):
     content = filepath.read_text(encoding="utf-8", errors="replace")
     current_class = None
+    current_const = None  # for `export declare const X: { ... }` objects
 
     for line in content.split("\n"):
+        # Match `export declare const X: {` — treat as enum-like const object
+        const_m = re.match(r"export\s+declare\s+const\s+(\w+)\s*:\s*\{", line)
+        if const_m:
+            current_const = const_m.group(1)
+            if current_const not in surface.classes:
+                surface.classes[current_const] = ClassInfo(name=current_const, is_enum=True)
+            current_class = None
+            continue
+
+        if current_const:
+            # Extract `readonly key:` entries as enum members
+            key_m = re.match(r"\s+readonly\s+(\w+)\s*:", line)
+            if key_m:
+                surface.classes[current_const].enum_members.add(key_m.group(1))
+            if re.match(r"^}", line):
+                current_const = None
+            continue
+
         class_m = re.match(r"(?:export\s+)?class\s+(\w+)", line)
         if class_m:
             current_class = class_m.group(1)
@@ -426,7 +445,7 @@ def extract_code_blocks(md_content, lang):
 class CodeValidator(ast.NodeVisitor):
     """Validate Python code examples against an SDK surface with type inference."""
 
-    def __init__(self, surface, prefix):
+    def __init__(self, surface, prefix, sdk_roots=None):
         self.surface = surface
         self.prefix = prefix
         self.errors = []
@@ -435,6 +454,11 @@ class CodeValidator(ast.NodeVisitor):
         self.var_types = {}
         # Track which names were imported from galileo/promptquality
         self.sdk_imports = {}  # local name -> imported name
+        # Track module aliases: `import promptquality as pq` -> pq -> promptquality
+        self.module_aliases = {}  # local alias -> module root name
+        # SDK roots in scope for this validation pass (e.g. {"galileo", "galileo_core"})
+        # Only module aliases whose root is in this set are validated.
+        self.sdk_roots = sdk_roots or {"galileo", "galileo_core", "promptquality"}
 
     def visit_ImportFrom(self, node):
         if not node.module:
@@ -466,6 +490,9 @@ class CodeValidator(ast.NodeVisitor):
             if root in ("galileo", "galileo_core", "promptquality"):
                 local = alias.asname or alias.name.split(".")[-1]
                 self.sdk_imports[local] = alias.name
+                # Track module-level aliases: `import promptquality as pq`
+                if alias.asname:
+                    self.module_aliases[alias.asname] = root
 
     def visit_Assign(self, node):
         """Track variable types: x = ClassName(...) or x = module.ClassName(...)"""
@@ -523,6 +550,18 @@ class CodeValidator(ast.NodeVisitor):
                     self.warnings.append(
                         f"{self.prefix}: '{class_name}.{method_name}()' — method not found on class (checked bases: {ci.bases})"
                     )
+            elif isinstance(obj, ast.Name) and obj.id in self.module_aliases:
+                # Module alias call: pq.something() — only validate when the aliased
+                # module belongs to the SDK currently being tested. This prevents
+                # false positives when a file shows legacy pq.* examples alongside
+                # galileo 2.x code (or vice versa).
+                alias_name = obj.id
+                alias_root = self.module_aliases[alias_name]
+                if alias_root in self.sdk_roots:
+                    if method_name not in self.surface.exports and method_name not in self.surface.classes:
+                        self.errors.append(
+                            f"{self.prefix}: '{alias_name}.{method_name}()' — '{method_name}' not found in SDK exports"
+                        )
 
         self.generic_visit(node)
 
@@ -868,7 +907,16 @@ def main():
                             warn(f"{skill['name']} [{rel_file}] block {i+1}: SyntaxError — {e.msg}")
                             continue
 
-                        validator = CodeValidator(surface, f"{skill['name']} [{rel_file}]")
+                        # Scope alias validation to this package's module roots only.
+                        # e.g. when validating against galileo@2.x, skip pq.* calls.
+                        pkg_name = pkg["name"]
+                        if pkg_name == "galileo":
+                            sdk_roots = {"galileo", "galileo_core"}
+                        elif pkg_name == "promptquality":
+                            sdk_roots = {"promptquality"}
+                        else:
+                            sdk_roots = {pkg_name.replace("-", "_")}
+                        validator = CodeValidator(surface, f"{skill['name']} [{rel_file}]", sdk_roots=sdk_roots)
                         validator.visit(tree)
 
                         for err in validator.errors:

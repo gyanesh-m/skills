@@ -3,7 +3,7 @@
 ## Batch Evaluation Across Test Cases
 
 ```typescript
-import { runExperiment } from "galileo";
+import { runExperiment, GalileoMetrics } from "galileo";
 
 const result = await runExperiment({
   name: "batch-eval",
@@ -12,7 +12,7 @@ const result = await runExperiment({
     { input: "Explain RAG", context: "Retrieval-augmented generation combines..." },
     { input: "What is fine-tuning?", context: "Fine-tuning adapts a pre-trained model..." },
   ],
-  metrics: ["context_adherence", "chunk_attribution_utilization", "completeness"],
+  metrics: [GalileoMetrics.contextAdherence, GalileoMetrics.chunkAttributionUtilization, GalileoMetrics.completeness],
   projectName: "eval-project",
   function: async (input) => {
     return await callYourLLM(input.input, input.context);
@@ -25,12 +25,12 @@ const result = await runExperiment({
 Use `GalileoLogger` within a `runExperiment` function for fine-grained span logging during evaluation:
 
 ```typescript
-import { runExperiment, GalileoLogger } from "galileo";
+import { runExperiment, GalileoLogger, GalileoMetrics } from "galileo";
 
 const result = await runExperiment({
   name: "agent-eval",
   datasetName: "agent-test-cases",
-  metrics: ["context_adherence", "completeness", "input_toxicity"],
+  metrics: [GalileoMetrics.contextAdherence, GalileoMetrics.completeness, GalileoMetrics.inputToxicity],
   projectName: "eval-project",
   function: async (input) => {
     const docs = await searchTool(input.query);
@@ -45,7 +45,7 @@ const result = await runExperiment({
 Run the same test set across different models and compare results in the Galileo console:
 
 ```typescript
-import { runExperiment } from "galileo";
+import { runExperiment, GalileoMetrics } from "galileo";
 
 const models = ["gpt-4o", "gpt-4o-mini", "gpt-3.5-turbo"];
 
@@ -53,7 +53,7 @@ for (const model of models) {
   await runExperiment({
     name: `eval-${model}`,
     datasetName: "benchmark-dataset",
-    metrics: ["correctness", "completeness", "uncertainty"],
+    metrics: [GalileoMetrics.correctness, GalileoMetrics.completeness, GalileoMetrics.groundTruthAdherence],
     projectName: "model-comparison",
     function: async (input) => {
       return await callLLM(input.question, model);
@@ -67,14 +67,14 @@ for (const model of models) {
 Evaluate prompt templates directly without writing a custom function:
 
 ```typescript
-import { runExperiment } from "galileo";
+import { runExperiment, GalileoMetrics } from "galileo";
 
 const result = await runExperiment({
   name: "prompt-template-eval",
   datasetName: "my-test-dataset",
   promptTemplate: { id: "your-prompt-template-id" },
   promptSettings: { model_alias: "GPT-4o", temperature: 0.7, max_tokens: 500 },
-  metrics: ["correctness", "instruction_adherence", "completeness"],
+  metrics: [GalileoMetrics.correctness, GalileoMetrics.instructionAdherence, GalileoMetrics.completeness],
   projectName: "prompt-optimization",
 });
 ```
