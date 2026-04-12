@@ -4,7 +4,8 @@
   "description": "Curated multi-vendor evaluation and observability skills for AI coding agents",
   "scripts": {
     "lint": "node scripts/validate.js",
-    "test": "node scripts/validate.js"
+    "test": "node scripts/validate.js",
+    "validate:sdk": "python3 scripts/sdk-validation/validate.py"
   },
   "repository": {
     "type": "git",

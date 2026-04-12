@@ -108,18 +108,16 @@ process.on("SIGTERM", () => sdk.shutdown());
 
 ## Combining Native SDK with OpenTelemetry
 
-You can use the Galileo TypeScript SDK's `GalileoObserveWorkflow` alongside OpenTelemetry-instrumented frameworks for comprehensive coverage:
+You can use the Galileo TypeScript SDK alongside OpenTelemetry-instrumented frameworks for comprehensive coverage:
 
 ```typescript
-import { GalileoObserveWorkflow } from "@rungalileo/galileo";
+import { wrapOpenAI, init, flush } from "galileo";
+import OpenAI from "openai";
 
-const workflow = new GalileoObserveWorkflow("hybrid-project");
-await workflow.init();
+await init({ projectName: "hybrid-project", logstream: "production" });
 
-workflow.addWorkflow({ input: userQuery });
+const openai = wrapOpenAI(new OpenAI());
 const response = await instrumentedLangGraphAgent(userQuery);
-workflow.addLlmStep({ input: userQuery, output: response, durationNs, model: "gpt-4o" });
-workflow.concludeWorkflow(response);
 
-await workflow.uploadWorkflows();
+await flush();
 ```

@@ -111,6 +111,7 @@ VertexAIInstrumentor().instrument()
 To send OpenTelemetry traces to Galileo, configure the exporter:
 
 ```python
+import os
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor

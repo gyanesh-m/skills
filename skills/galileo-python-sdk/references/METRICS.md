@@ -32,23 +32,20 @@ Galileo provides proprietary metrics that can be used for evaluation scoring, pr
 
 ## Using Metrics in Code
 
-### In Evaluation Runs
+### In Evaluation Runs (galileo 2.x)
 
 ```python
-import promptquality as pq
+from galileo import GalileoLogger
 
-metrics = [
-    pq.Scorers.context_adherence_plus,
-    pq.Scorers.prompt_injection,
-    pq.Scorers.toxicity,
-    pq.Scorers.pii,
-]
+logger = GalileoLogger(project="safety-eval", log_stream="eval-run")
 
-evaluate_run = EvaluateRun(
-    run_name="safety-eval",
-    project_name="my-project",
-    scorers=metrics,
+logger.add_single_llm_span_trace(
+    input="Is this content safe?",
+    output="Yes, the content is safe.",
+    model="gpt-4o",
 )
+
+logger.flush()
 ```
 
 ### In Guardrail Rules
@@ -64,7 +61,7 @@ toxicity_rule = Rule(
 )
 
 pii_rule = Rule(
-    metric=GalileoMetrics.pii,
+    metric=GalileoMetrics.input_pii,
     operator=RuleOperator.gt,
     target_value=0.0,
 )
@@ -78,19 +75,32 @@ injection_rule = Rule(
 
 ### Available `GalileoMetrics` Constants
 
-- `GalileoMetrics.input_toxicity`
-- `GalileoMetrics.output_toxicity`
-- `GalileoMetrics.pii`
-- `GalileoMetrics.prompt_injection`
-- `GalileoMetrics.sexism`
-- `GalileoMetrics.tone`
+**RAG & Context:**
 - `GalileoMetrics.context_adherence`
-- `GalileoMetrics.chunk_attribution`
-- `GalileoMetrics.chunk_utilization`
+- `GalileoMetrics.chunk_attribution_utilization`
 - `GalileoMetrics.completeness`
-- `GalileoMetrics.uncertainty`
-- `GalileoMetrics.correctness`
+- `GalileoMetrics.context_relevance`
+- `GalileoMetrics.ground_truth_adherence`
 - `GalileoMetrics.instruction_adherence`
+
+**Safety & Content:**
+- `GalileoMetrics.input_toxicity` / `GalileoMetrics.output_toxicity`
+- `GalileoMetrics.input_pii` / `GalileoMetrics.output_pii`
+- `GalileoMetrics.prompt_injection`
+- `GalileoMetrics.input_sexism` / `GalileoMetrics.output_sexism`
+- `GalileoMetrics.input_tone` / `GalileoMetrics.output_tone`
+- `GalileoMetrics.sql_injection`
+
+**Quality & Accuracy:**
+- `GalileoMetrics.correctness`
+
+**Agentic:**
+- `GalileoMetrics.agent_efficiency`
+- `GalileoMetrics.agent_flow`
+- `GalileoMetrics.tool_selection_quality`
+- `GalileoMetrics.tool_error_rate`
+
+Many metrics also have `_luna` variants (e.g., `context_adherence_luna`) that use Galileo's small language model for faster, lower-cost scoring.
 
 ### Available `pq.Scorers` Constants
 
@@ -98,11 +108,8 @@ injection_rule = Rule(
 - `pq.Scorers.prompt_injection`
 - `pq.Scorers.toxicity`
 - `pq.Scorers.pii`
-- `pq.Scorers.sexism`
+- `pq.Scorers.sexist`
 - `pq.Scorers.tone`
-- `pq.Scorers.chunk_attribution`
-- `pq.Scorers.chunk_utilization`
-- `pq.Scorers.completeness`
-- `pq.Scorers.uncertainty`
+- `pq.Scorers.chunk_attribution_utilization_plus`
+- `pq.Scorers.completeness_plus`
 - `pq.Scorers.correctness`
-- `pq.Scorers.instruction_adherence`

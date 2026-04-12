@@ -1,42 +1,44 @@
 # Guardrail Metrics Reference (TypeScript)
 
-Galileo provides built-in scoring metrics that can be enabled when uploading evaluation workflows. These metrics are computed server-side by the Galileo platform.
+Galileo provides built-in scoring metrics that can be used with `runExperiment` or `GalileoLogger`. These metrics are computed server-side by the Galileo platform.
 
 ## Available Scorer Metrics
 
-Pass these as configuration keys to `uploadWorkflows()` in `GalileoEvaluateWorkflow`:
+Use metrics via the `GalileoMetrics` const object (e.g. `GalileoMetrics.contextAdherence`):
 
-| Metric Key | Description | Best For |
+| Property | Description | Best For |
 |---|---|---|
-| `context_adherence` | Measures whether responses are grounded in provided context | RAG pipelines, context-based Q&A |
-| `chunk_attribution` | Whether each retrieved chunk contributed to the response | RAG retrieval quality |
-| `chunk_utilization` | How much of each retrieved chunk was used in generation | Optimizing chunk sizes |
+| `contextAdherence` | Measures whether responses are grounded in provided context | RAG pipelines, context-based Q&A |
+| `chunkAttributionUtilization` | Whether retrieved chunks contributed to and were used in the response | RAG retrieval quality |
 | `completeness` | Whether the response fully addresses the input query | Q&A, customer support |
-| `instruction_adherence` | Response alignment with system instructions | Instruction-following tasks |
-| `uncertainty` | Model certainty level — correlates with hallucinations | Hallucination detection |
+| `instructionAdherence` | Response alignment with system instructions | Instruction-following tasks |
+| `contextRelevance` | Relevance of retrieved context to the query | RAG retrieval tuning |
+| `groundTruthAdherence` | Response alignment with ground truth | Accuracy benchmarking |
 | `correctness` | Whether response facts are verifiable | Factual accuracy |
-| `toxicity` | Detects abusive or toxic language | Content moderation |
-| `pii` | Surfaces personally identifiable information | Privacy compliance |
-| `prompt_injection` | Identifies adversarial prompt injection attempts | Security |
-| `sexism` | Detects gender-biased content | Bias detection |
-| `tone` | Classifies responses into emotion categories | Brand voice, CX |
+| `inputToxicity` / `outputToxicity` | Detects abusive or toxic language | Content moderation |
+| `inputPii` / `outputPii` | Surfaces personally identifiable information | Privacy compliance |
+| `promptInjection` | Identifies adversarial prompt injection attempts | Security |
+| `inputSexism` / `outputSexism` | Detects gender-biased content | Bias detection |
+| `inputTone` / `outputTone` | Classifies into emotion categories | Brand voice, CX |
+| `agentEfficiency` | Measures agent task completion efficiency | Agentic workflows |
+| `toolSelectionQuality` | Quality of tool selection decisions | Agentic workflows |
+| `toolErrorRate` | Rate of tool execution errors | Agentic workflows |
 
-## Usage in Evaluate Workflows
+Many metrics also have `Luna` variants (e.g., `contextAdherenceLuna`) that use Galileo's small language model for faster, lower-cost scoring.
+
+## Usage in Experiments
 
 ```typescript
-import { GalileoEvaluateWorkflow } from "@rungalileo/galileo";
+import { runExperiment, GalileoMetrics } from "galileo";
 
-const workflow = new GalileoEvaluateWorkflow("eval-project");
-await workflow.init();
-
-// ... add workflows and steps ...
-
-await workflow.uploadWorkflows({
-  context_adherence: true,
-  completeness: true,
-  toxicity: true,
-  pii: true,
-  prompt_injection: true,
+const result = await runExperiment({
+  name: "safety-eval",
+  datasetName: "my-test-dataset",
+  metrics: [GalileoMetrics.contextAdherence, GalileoMetrics.completeness, GalileoMetrics.inputToxicity, GalileoMetrics.inputPii, GalileoMetrics.promptInjection],
+  projectName: "eval-project",
+  function: async (input) => {
+    return await callYourLLM(input.question);
+  },
 });
 ```
 
@@ -44,30 +46,20 @@ await workflow.uploadWorkflows({
 
 **RAG applications:**
 ```typescript
-await workflow.uploadWorkflows({
-  context_adherence: true,
-  chunk_attribution: true,
-  chunk_utilization: true,
-  completeness: true,
-});
+metrics: [GalileoMetrics.contextAdherence, GalileoMetrics.chunkAttributionUtilization, GalileoMetrics.completeness, GalileoMetrics.contextRelevance]
 ```
 
 **Safety-critical applications:**
 ```typescript
-await workflow.uploadWorkflows({
-  toxicity: true,
-  pii: true,
-  prompt_injection: true,
-  sexism: true,
-});
+metrics: [GalileoMetrics.inputToxicity, GalileoMetrics.outputToxicity, GalileoMetrics.inputPii, GalileoMetrics.outputPii, GalileoMetrics.promptInjection, GalileoMetrics.inputSexism]
 ```
 
 **General quality assessment:**
 ```typescript
-await workflow.uploadWorkflows({
-  uncertainty: true,
-  correctness: true,
-  completeness: true,
-  tone: true,
-});
+metrics: [GalileoMetrics.correctness, GalileoMetrics.completeness, GalileoMetrics.inputTone]
+```
+
+**Agentic workflows:**
+```typescript
+metrics: [GalileoMetrics.agentEfficiency, GalileoMetrics.toolSelectionQuality, GalileoMetrics.toolErrorRate]
 ```

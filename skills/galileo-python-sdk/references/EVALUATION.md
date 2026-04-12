@@ -58,25 +58,12 @@ for temp in [0.0, 0.5, 1.0]:
 
 ## Evaluation Runs with Custom Workflows
 
-Log multi-step workflows for evaluation with specific scorers:
+Log multi-step workflows for evaluation using `GalileoLogger` (galileo 2.x):
 
 ```python
-from promptquality import EvaluateRun
-import promptquality as pq
+from galileo import GalileoLogger
 
-pq.login()
-
-metrics = [
-    pq.Scorers.context_adherence_plus,
-    pq.Scorers.completeness,
-    pq.Scorers.toxicity,
-]
-
-evaluate_run = EvaluateRun(
-    run_name="rag-evaluation",
-    project_name="rag-project",
-    scorers=metrics,
-)
+logger = GalileoLogger(project="rag-project", log_stream="rag-evaluation")
 
 test_queries = [
     {"input": "What is machine learning?", "context": "ML is a subset of AI..."},
@@ -85,14 +72,13 @@ test_queries = [
 
 for item in test_queries:
     output = your_rag_pipeline(item["input"], item["context"])
-    evaluate_run.add_single_step_workflow(
+    logger.add_single_llm_span_trace(
         input=item["input"],
         output=output,
-        context=item["context"],
         model="gpt-4o",
     )
 
-evaluate_run.finish()
+logger.flush()
 ```
 
 ## Multi-Step Workflow Evaluation
@@ -100,29 +86,21 @@ evaluate_run.finish()
 For complex pipelines with retrieval and generation steps:
 
 ```python
-from promptquality import EvaluateRun
-import promptquality as pq
+from galileo import GalileoLogger
 
-pq.login()
-
-evaluate_run = EvaluateRun(
-    run_name="multi-step-eval",
-    project_name="agent-project",
-    scorers=[pq.Scorers.context_adherence_plus, pq.Scorers.chunk_attribution],
-)
+logger = GalileoLogger(project="agent-project", log_stream="multi-step-eval")
 
 query = "What are the benefits of RAG?"
 retrieved_docs = retriever.search(query)
 response = llm.generate(query, context=retrieved_docs)
 
-evaluate_run.add_single_step_workflow(
+logger.add_single_llm_span_trace(
     input=query,
     output=response,
-    context=retrieved_docs,
     model="gpt-4o",
 )
 
-evaluate_run.finish()
+logger.flush()
 ```
 
 ## Best Practices for Evaluation
@@ -131,4 +109,4 @@ evaluate_run.finish()
 2. **Run multiple evaluation sets** across different data distributions to catch edge cases.
 3. **Compare scorer results** across runs to track quality improvements over time.
 4. **Include context** in RAG evaluations so context-dependent metrics (Context Adherence, Chunk Attribution) can be computed.
-5. **Use `EvaluateRun.finish()`** to ensure all results are uploaded and scored.
+5. **Call `logger.flush()`** after logging all traces to ensure results are uploaded and scored.
