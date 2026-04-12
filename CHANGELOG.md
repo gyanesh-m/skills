@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-03-27
+
+### Changed
+
+- Bumped package release version in `package.json` to `1.2.0` to align with the current catalog release.
+- Added this changelog entry to document the `1.2.0` release metadata update.
+
 ## [1.1.0] - 2026-03-27
 
 ### Changed
