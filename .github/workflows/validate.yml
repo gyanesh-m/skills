@@ -19,8 +19,16 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Validate skill files
         run: node scripts/validate.js
+
+      - name: Validate SDK API surface
+        run: python3 scripts/sdk-validation/validate.py
 
       - name: Check markdown files exist
         run: |

@@ -1,0 +1,45 @@
+{
+  "galileo-python-sdk": {
+    "language": "python",
+    "packages": [
+      {
+        "name": "galileo",
+        "version_field": "sdk-version",
+        "deps": [
+          { "name": "galileo-core", "version_range": ">=4.3.0,<5.0.0" }
+        ],
+        "files": [
+          "SKILL.md",
+          "references/EVALUATION.md",
+          "references/METRICS.md",
+          "references/INTEGRATIONS.md"
+        ]
+      },
+      {
+        "name": "promptquality",
+        "version": "1.14.0",
+        "deps": [
+          { "name": "galileo-core", "version_range": ">=3.62.0,<4.0.0" }
+        ],
+        "files": [
+          "references/PROMPTQUALITY.md"
+        ]
+      }
+    ]
+  },
+  "galileo-typescript-sdk": {
+    "language": "typescript",
+    "packages": [
+      {
+        "name": "galileo",
+        "version_field": "sdk-version",
+        "files": [
+          "SKILL.md",
+          "references/EVALUATION.md",
+          "references/METRICS.md",
+          "references/INTEGRATIONS.md"
+        ]
+      }
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-# Eval Agent Skills Catalog
+# Agent Skills Catalog
 
 [![CI](https://img.shields.io/github/actions/workflow/status/gyanesh-m/skills/validate.yml?branch=master&label=CI)](https://github.com/gyanesh-m/skills/actions/workflows/validate.yml)
 [![Install via skills.sh](https://img.shields.io/badge/skills.sh-install-blue)](https://skills.sh/gyanesh-m/skills)
@@ -104,11 +104,35 @@ This project is evolving into a curated multi-vendor index for eval skills:
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for submission rules and naming conventions.
 
+## Correctness Validation
+
+Every skill in this catalog is validated against the actual SDK it documents. A CI harness downloads each SDK package at its declared version and uses Python's `ast` module to verify that all code examples in the skill docs are correct:
+
+- **Import validation** — every `from galileo import X` is checked against the real package exports
+- **Enum member validation** — references like `GalileoMetrics.context_adherence` are verified against the actual enum definition
+- **Method/attribute validation** — class methods and attributes are resolved through the full inheritance chain (MRO)
+- **Parameter validation** — keyword arguments in function calls are checked against the real function signatures
+- **Type-inferred instance checks** — variable assignments like `logger = GalileoLogger()` are tracked so that `logger.method()` calls can be validated against the class
+- **Version-pinned dependencies** — each SDK track is validated with the correct dependency versions (e.g., `galileo-core` 4.x for galileo v2, `galileo-core` 3.x for promptquality v1)
+
+```bash
+# Structural validation (frontmatter, directories)
+npm run lint
+
+# SDK validation (downloads real packages, AST-based)
+npm run validate:sdk
+```
+
+To add validation for a new SDK skill, add an entry to [`scripts/sdk-validation/sdk-config.json`](scripts/sdk-validation/sdk-config.json).
+
 ## Developer Workflow
 
 ```bash
 # Validate skill metadata/frontmatter
 npm run lint
+
+# Validate SDK API correctness
+npm run validate:sdk
 
 # Discover this catalog exactly as users do
 npx skills add gyanesh-m/skills --list
