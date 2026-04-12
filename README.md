@@ -3,7 +3,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/gyanesh-m/skills/validate.yml?branch=master&label=CI)](https://github.com/gyanesh-m/skills/actions/workflows/validate.yml)
 [![Install via skills.sh](https://img.shields.io/badge/skills.sh-install-blue)](https://skills.sh/gyanesh-m/skills)
 [![Release](https://img.shields.io/github/v/release/gyanesh-m/skills?display_name=tag&sort=semver)](https://github.com/gyanesh-m/skills/releases/latest)
-[![Skills](https://img.shields.io/badge/skills-3-blue.svg)](#available-skills)
+[![Skills](https://img.shields.io/badge/skills-2-blue.svg)](#available-skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-agentskills.io-blue)](https://agentskills.io)
 
@@ -81,7 +81,6 @@ This repository currently keeps stable skills in `skills/` and supports curated 
 |---|---|---|---|---|
 | [`galileo-python-sdk`](skills/galileo-python-sdk/SKILL.md) | Galileo | stable | Evaluate, observe, protect (Python) | `npx skills add gyanesh-m/skills --skill galileo-python-sdk` |
 | [`galileo-typescript-sdk`](skills/galileo-typescript-sdk/SKILL.md) | Galileo | stable | Evaluate + observe (TypeScript/JS) | `npx skills add gyanesh-m/skills --skill galileo-typescript-sdk` |
-| [`braintrust-sdk`](skills/braintrust-sdk/SKILL.md) | Braintrust | stable | Eval experiments, tracing, autoevals scoring (Python + TypeScript) | `npx skills add gyanesh-m/skills --skill braintrust-sdk` |
 
 ### Highlights
 
