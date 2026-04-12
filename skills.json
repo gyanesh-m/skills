@@ -9,6 +9,6 @@
       "name": "galileo-typescript-sdk",
       "path": "skills/galileo-typescript-sdk",
       "description": "Galileo AI platform TypeScript/JS SDK for evaluation, observability, and guardrails"
-    },
+    }
   ]
 }

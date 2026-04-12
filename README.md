@@ -105,7 +105,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for submission rules and naming conventio
 
 ## Correctness Validation
 
-Every skill in this catalog is validated against the actual SDK it documents. A CI harness downloads each SDK package at its declared version and uses Python's `ast` module to verify that all code examples in the skill docs are correct:
+Every skill in this catalog is validated against the actual SDK it documents. A CI validation script downloads each SDK package at its declared version and uses Python's `ast` module to verify that all code examples in the skill docs are correct:
 
 - **Import validation** — every `from galileo import X` is checked against the real package exports
 - **Enum member validation** — references like `GalileoMetrics.context_adherence` are verified against the actual enum definition
