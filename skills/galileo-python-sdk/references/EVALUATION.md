@@ -109,4 +109,4 @@ logger.flush()
 2. **Run multiple evaluation sets** across different data distributions to catch edge cases.
 3. **Compare scorer results** across runs to track quality improvements over time.
 4. **Include context** in RAG evaluations so context-dependent metrics (Context Adherence, Chunk Attribution) can be computed.
-5. **Use `EvaluateRun.finish()`** to ensure all results are uploaded and scored.
+5. **Call `logger.flush()`** after logging all traces to ensure results are uploaded and scored.

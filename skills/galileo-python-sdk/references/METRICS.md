@@ -32,23 +32,20 @@ Galileo provides proprietary metrics that can be used for evaluation scoring, pr
 
 ## Using Metrics in Code
 
-### In Evaluation Runs
+### In Evaluation Runs (galileo 2.x)
 
 ```python
-import promptquality as pq
+from galileo import GalileoLogger
 
-metrics = [
-    pq.Scorers.context_adherence_plus,
-    pq.Scorers.prompt_injection,
-    pq.Scorers.toxicity,
-    pq.Scorers.pii,
-]
+logger = GalileoLogger(project="safety-eval", log_stream="eval-run")
 
-evaluate_run = EvaluateRun(
-    run_name="safety-eval",
-    project_name="my-project",
-    scorers=metrics,
+logger.add_single_llm_span_trace(
+    input="Is this content safe?",
+    output="Yes, the content is safe.",
+    model="gpt-4o",
 )
+
+logger.flush()
 ```
 
 ### In Guardrail Rules
