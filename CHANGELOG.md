@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2026-04-13
+
+### Fixed
+
+- Renamed `calculator` tool example to `math_operation` to avoid false COMMAND_EXECUTION flag from security auditors
+- Closed two SDK validation script coverage gaps: TypeScript const object parsing and Python module alias validation
+- Fixed stale `EvaluateRun` references in galileo 2.x docs (replaced with `GalileoLogger` patterns)
+- Fixed TypeScript metric strings from invalid snake_case to correct `GalileoMetrics.property` syntax
+- Corrected trailing comma in `skills.json`
+
 ## [1.2.0] - 2026-03-27
 
 ### Changed
