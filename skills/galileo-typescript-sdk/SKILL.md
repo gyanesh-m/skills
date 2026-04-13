@@ -156,7 +156,7 @@ logger.addToolSpan({
 });
 
 logger.addLlmSpan({
-  input: "The calculator returned 630. Respond to the user.",
+  input: "The math tool returned 630. Respond to the user.",
   output: "15 multiplied by 42 equals 630.",
   durationNs: 800000000,
   model: "gpt-4o",
