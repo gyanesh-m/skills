@@ -349,7 +349,7 @@ def rag_pipeline(question: str):
 from galileo import log
 
 @log(span_type="tool")
-def calculator(a: float, b: float, op: str) -> str:
+def math_operation(a: float, b: float, op: str) -> str:
     if op == "add":
         return str(a + b)
     elif op == "multiply":
@@ -365,8 +365,8 @@ def agent(user_input: str):
     plan = plan_actions(user_input)
     results = []
     for action in plan:
-        if action.tool == "calculator":
-            results.append(calculator(action.input))
+        if action.tool == "math_operation":
+            results.append(math_operation(action.input))
         elif action.tool == "web_search":
             results.append(web_search(action.input))
     return synthesize(results)
