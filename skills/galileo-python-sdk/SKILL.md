@@ -60,6 +60,12 @@ For runtime guardrails:
 pip install galileo-protect
 ```
 
+For production environments, treat dependency installation as a supply-chain boundary:
+
+- Pin versions in your lockfile/requirements.
+- Use trusted package indexes or an internal mirror.
+- Run `pip check` in CI after installation.
+
 ## Quick Start
 
 ```python
@@ -346,15 +352,24 @@ def rag_pipeline(question: str):
 ### Agent Tool Calling
 
 ```python
+from dataclasses import dataclass
+from typing import Any, Literal
+
 from galileo import log
+
+ALLOWED_TOOLS = {"calculator", "web_search"}
+ALLOWED_OPS = {"add", "multiply"}
+
+@dataclass
+class Action:
+    tool: Literal["calculator", "web_search"]
+    args: dict[str, Any]
 
 @log(span_type="tool")
 def calculator(a: float, b: float, op: str) -> str:
-    if op == "add":
-        return str(a + b)
-    elif op == "multiply":
-        return str(a * b)
-    raise ValueError(f"Unknown op: {op}")
+    if op not in ALLOWED_OPS:
+        raise ValueError(f"Unknown op: {op}")
+    return str(a + b) if op == "add" else str(a * b)
 
 @log(span_type="tool")
 def web_search(query: str):
@@ -362,13 +377,23 @@ def web_search(query: str):
 
 @log
 def agent(user_input: str):
-    plan = plan_actions(user_input)
+    plan: list[Action] = plan_actions(user_input)
     results = []
+
     for action in plan:
+        if action.tool not in ALLOWED_TOOLS:
+            raise ValueError(f"Unsupported tool: {action.tool}")
+
         if action.tool == "calculator":
-            results.append(calculator(action.input))
+            # Never pass raw user expressions into eval/exec.
+            a = float(action.args["a"])
+            b = float(action.args["b"])
+            op = str(action.args["op"])
+            results.append(calculator(a, b, op))
         elif action.tool == "web_search":
-            results.append(web_search(action.input))
+            query = str(action.args["query"]).strip()
+            results.append(web_search(query))
+
     return synthesize(results)
 ```
 
@@ -382,6 +407,7 @@ def agent(user_input: str):
 6. **Handle errors gracefully** — wrap `flush()` calls in try/except to prevent logging failures from crashing your application.
 7. **Use the wrapped OpenAI client** (`from galileo.openai import openai`) for zero-config automatic tracing of all OpenAI calls.
 8. **Leverage guardrail metrics** in production to catch hallucinations, toxic content, and PII before they reach end users.
+9. **Avoid dynamic execution** — never use `eval`/`exec` for tool calls; validate tool names and parse structured arguments instead.
 
 ## Resources
 
