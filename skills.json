@@ -9,6 +9,11 @@
       "name": "galileo-typescript-sdk",
       "path": "skills/galileo-typescript-sdk",
       "description": "Galileo AI platform TypeScript/JS SDK for evaluation, observability, and guardrails"
+    },
+    {
+      "name": "xquik-hermes-tweet",
+      "path": "skills/.experimental/xquik-hermes-tweet",
+      "description": "Hermes Agent workflows for catalog-guided Xquik reads and explicitly approved actions"
     }
   ]
 }

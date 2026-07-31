@@ -25,7 +25,7 @@ jobs:
           python-version: "3.12"
 
       - name: Validate skill files
-        run: node scripts/validate.js
+        run: npm test
 
       - name: Validate SDK API surface
         run: python3 scripts/sdk-validation/validate.py
