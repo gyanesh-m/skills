@@ -14,6 +14,40 @@ function success(msg) {
   console.log(`  ✅ ${msg}`);
 }
 
+function findDuplicateEntries(skills) {
+  const errors = [];
+  const firstNameIndex = new Map();
+  const firstPathIndex = new Map();
+
+  skills.forEach((skill, index) => {
+    if (!skill || typeof skill !== "object") return;
+
+    if (typeof skill.name === "string") {
+      const previousIndex = firstNameIndex.get(skill.name);
+      if (previousIndex === undefined) {
+        firstNameIndex.set(skill.name, index);
+      } else {
+        errors.push(
+          `skills.json duplicate name '${skill.name}' at entries ${previousIndex + 1} and ${index + 1}`,
+        );
+      }
+    }
+
+    if (typeof skill.path === "string") {
+      const previousIndex = firstPathIndex.get(skill.path);
+      if (previousIndex === undefined) {
+        firstPathIndex.set(skill.path, index);
+      } else {
+        errors.push(
+          `skills.json duplicate path '${skill.path}' at entries ${previousIndex + 1} and ${index + 1}`,
+        );
+      }
+    }
+  });
+
+  return errors;
+}
+
 function validateFrontmatter(content, skillName) {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
   if (!match) {
@@ -32,7 +66,7 @@ function validateFrontmatter(content, skillName) {
   const name = nameMatch[1].trim();
   if (name !== skillName) {
     error(
-      `${skillName}: SKILL.md frontmatter name '${name}' does not match directory '${skillName}'`
+      `${skillName}: SKILL.md frontmatter name '${name}' does not match directory '${skillName}'`,
     );
     return false;
   }
@@ -71,6 +105,10 @@ function main() {
   }
 
   success(`skills.json contains ${manifest.skills.length} skill(s)`);
+
+  for (const duplicateError of findDuplicateEntries(manifest.skills)) {
+    error(duplicateError);
+  }
 
   for (const skill of manifest.skills) {
     const skillDir = path.join(__dirname, "..", skill.path);
@@ -114,4 +152,8 @@ function main() {
   process.exit(exitCode);
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = { findDuplicateEntries };
